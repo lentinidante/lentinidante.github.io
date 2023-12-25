@@ -103,7 +103,7 @@ body {
 
 .gif-background {
   /* Style for the GIF background */
-  background-image: url('/kev.jpg'); /* Replace with your GIF path */
+  background-image: url('/kev.png'); /* Replace with your GIF path */
   background-size: cover;
   background-repeat: no-repeat;
 }
