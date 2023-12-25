@@ -3,14 +3,15 @@
 <head>
   <title>Dante Lentini</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" >
-  <link href="/resources/style.css" rel="stylesheet">
+  <link href="/Resources/style.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/Resources/favicon.ico">
 </head>
 <body>
   <h1 class="name">
     About
   </h1>
   <div class="desc">
-  <p>I'm a 21 year old product manager based in <em>Palo Alto, CA</em>. I currently study Computer Science at NYU.</p>
+  <p>I'm a 21 year old software engineer based in <em>Palo Alto, CA</em>. I currently study Computer Science at NYU.</p>
   <p>I enjoy building software people <s>want</s> love. Led product at Hyper, YC S21 — acquired in June. <sup>-yay!</sup></p>
 </div>
   <p id="sign">
@@ -23,8 +24,25 @@ Best,
                 <li><a class="social-link" href="https://www.linkedin.com/in/lentinidante/" target="_blank">LinkedIn</a></li>
                 <li><a class="social-link" href="https://github.com/lentinidante" target="_blank">GitHub</a></li>
                 <li><a class="social-link" href="mailto:dantelentinics@gmail.com" target="__blank">Email</a></li>
-                <li><a class="social-link" href="https://www.youtube.com/watch?v=iRcNU6tZ65E" target="__blank">Probably Nothing</a></li>
+                <li><a id="triggerText" class="social-link" href="#">Probably Nothing</a></li>
         </div>
+
+        <audio id="mySong" src="big.mp3" type="audio/mp3"></audio>
+
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById('triggerText').addEventListener('click', function() {
+        var mySong = document.getElementById('mySong');
+        if (mySong.paused) {
+            mySong.play();
+        } else {
+            mySong.pause();
+            mySong.currentTime = 0;
+        }
+        document.body.classList.toggle('gif-background');
+    });
+});
+</script>
   <!-- End Social Links -->
     </body>
 </html>
