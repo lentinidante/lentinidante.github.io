@@ -95,16 +95,3 @@ p {
 .name {
   margin-bottom: -5px;
 }
-
-body {
-  /* Your regular background style */
-  background-color: #f0f0f0; /* Example */
-}
-
-.gif-background {
-  /* Style for the GIF background */
-  background-image: url('/kev.png'); /* Replace with your GIF path */
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
