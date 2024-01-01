@@ -3,8 +3,8 @@
 <head>
   <title>Dante Lentini</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" >
-  <link href="/resources/style.css" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="/resources/favicon.ico">
+  <link href="/Resources/style.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/Resources/favicon.ico">
 </head>
 <body>
   <h1 class="name">
@@ -26,23 +26,6 @@ Best,
                 <li><a class="social-link" href="mailto:dantelentinics@gmail.com" target="__blank">Email</a></li>
                 <li><a id="triggerText" class="social-link" href="#">Probably Nothing</a></li>
         </div>
-
-        <audio id="mySong" src="big.mp3" type="audio/mp3"></audio>
-
-<script>
-document.addEventListener('DOMContentLoaded', (event) => {
-    document.getElementById('triggerText').addEventListener('click', function() {
-        var mySong = document.getElementById('mySong');
-        if (mySong.paused) {
-            mySong.play();
-        } else {
-            mySong.pause();
-            mySong.currentTime = 0;
-        }
-        document.body.classList.toggle('gif-background');
-    });
-});
-</script>
   <!-- End Social Links -->
     </body>
 </html>
