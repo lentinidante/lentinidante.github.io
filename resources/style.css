@@ -50,8 +50,6 @@ html {
 }
 
 body {
-  background-color: rgb(249, 250, 251);
-  color: #000000;
   margin: 40px;
 }
 
@@ -77,7 +75,7 @@ p {
 }
 
 .social-link:hover {
-  color: #f080ff;
+  color: #f080ff !important;
   border-radius: 6px;
   text-decoration: overline;
 }
@@ -87,11 +85,26 @@ p {
   font-size: 30px;
 }
 
-#sign,
-#signature {
+#sign, #signature {
   line-height: 65%;
 }
 
 .name {
   margin-bottom: -5px;
+}
+
+body {
+    background-color: white;
+    color: black;
+
+}
+
+body.dark-mode {
+    background-color: rgb(10, 10, 11);
+    color: white;
+}
+
+body.dark-mode a,
+body.dark-mode a.social-link {
+  color: white;
 }
