@@ -24,8 +24,34 @@ Best,
                 <li><a class="social-link" href="https://www.linkedin.com/in/lentinidante/" target="_blank">LinkedIn</a></li>
                 <li><a class="social-link" href="https://github.com/lentinidante" target="_blank">GitHub</a></li>
                 <li><a class="social-link" href="mailto:dantelentinics@gmail.com" target="__blank">Email</a></li>
-                <li><a id="triggerText" class="social-link" href="#">Probably Nothing</a></li>
+                <li><a id="modeToggle" class="social-link" href="#">Probably Nothing</a></li>
         </div>
   <!-- End Social Links -->
+  <script>
+    document.getElementById('modeToggle').addEventListener('click', function() {
+        // Set a timeout for 7 seconds before executing the code
+        setTimeout(function() {
+            document.body.classList.toggle('dark-mode');
+        }, 6300); // 7000 milliseconds = 7 seconds
+    });
+</script>
+<audio id="nightSound" src="/resources/night.mp3" preload="auto"></audio>
+<script>
+  document.getElementById('modeToggle').addEventListener('click', function(event) {
+      event.preventDefault(); // Prevents the default link behavior
+      var audio = document.getElementById('nightSound');
+
+      // Check if the audio is playing
+      if (!audio.paused) {
+          // If playing, pause it
+          audio.pause();
+          audio.currentTime = 0; // Optionally, reset the audio to the start
+      } else {
+          // If not playing, play the audio
+          audio.play();
+      }
+  });
+</script>
+</script>
     </body>
 </html>
