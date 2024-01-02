@@ -11,7 +11,7 @@
     About
   </h1>
   <div class="desc">
-  <p>I'm a 21 year old software engineer based in <em>Palo Alto, CA</em>. I currently study Computer Science at NYU.</p>
+  <p>I'm a 21 year old product manager based in <em>Palo Alto, CA</em>. I currently study Computer Science at NYU.</p>
   <p>I enjoy building software people <s>want</s> love. Led product at Hyper, YC S21 — acquired in June. <sup>-yay!</sup></p>
 </div>
   <p id="sign">
@@ -31,20 +31,22 @@ Best,
     var toggleTimeout;  // Variable to store the timeout reference
 
     document.getElementById('modeToggle').addEventListener('click', function() {
-        // Check if dark mode is currently not active
-        if (!document.body.classList.contains('dark-mode')) {
-            // Clear any existing timeout to prevent multiple toggles
-            clearTimeout(toggleTimeout);
-
+        // Check if dark mode is currently not active and no timeout is set
+        if (!document.body.classList.contains('dark-mode') && !toggleTimeout) {
             // Set a new timeout for 7 seconds before turning on dark mode
             toggleTimeout = setTimeout(function() {
                 document.body.classList.add('dark-mode');
-            }, 6300); // 6300 milliseconds = 6.3 seconds
+                toggleTimeout = null; // Reset the timeout reference after applying dark mode
+            }, 6300); // 7000 milliseconds = 7 seconds
         } else {
-            // If dark mode is active, turn it off immediately
-            // Also clear any existing timeout to ensure it doesn't trigger
+            // If dark mode is active or the button is clicked again during the delay:
+            // 1. Turn off dark mode immediately if it's active
+            // 2. Clear any existing timeout
+            if (document.body.classList.contains('dark-mode')) {
+                document.body.classList.remove('dark-mode');
+            }
             clearTimeout(toggleTimeout);
-            document.body.classList.remove('dark-mode');
+            toggleTimeout = null; // Reset the timeout reference
         }
     });
 </script>
@@ -64,7 +66,6 @@ Best,
           audio.play();
       }
   });
-</script>
 </script>
     </body>
 </html>
