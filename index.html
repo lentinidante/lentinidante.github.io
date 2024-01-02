@@ -198,7 +198,14 @@ Best,
           shootingStars = [];
       }
   });
+  function resizeCanvas() {
+    var ratio = window.devicePixelRatio || 1;
+    starCanvas.width = window.innerWidth * ratio;
+    starCanvas.height = window.innerHeight * ratio;
+    starCanvas.style.width = window.innerWidth + 'px';
+    starCanvas.style.height = window.innerHeight + 'px';
+    ctx.scale(ratio, ratio);
+}
 </script>
-
     </body>
 </html>
