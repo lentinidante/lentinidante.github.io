@@ -94,7 +94,7 @@ p {
 }
 
 body {
-    background-color: rgb(240, 240, 240);
+    background-color: white;
     color: black;
 }
 
@@ -109,10 +109,10 @@ body.dark-mode a.social-link {
 }
 
 #starCanvas {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* Send to back */
+  z-index: -1; /* Ensure it's behind other content but above the background */
 }
