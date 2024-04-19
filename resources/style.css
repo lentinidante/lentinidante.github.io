@@ -272,6 +272,10 @@ h1 {
   text-decoration: overline;
 }
 
+#company {
+  color: #ffffff;
+}
+
 #signature {
   font-family: "Caveat";
   font-size: 30px;
