@@ -267,7 +267,7 @@ h1 {
 }
 
 .social-link:hover {
-  color: #ffffff !important;
+  color: #ffffff;
   border-radius: 6px;
   text-decoration: overline;
 }
@@ -303,6 +303,11 @@ body.dark-mode {
 body.dark-mode a,
 body.dark-mode a.social-link {
   color: white;
+}
+
+.company {
+  color: #ffffff;
+  text-decoration: none;
 }
 
 /* Ensures the star canvas covers the entire viewport and is just above the background */
