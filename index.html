@@ -7,27 +7,24 @@
   <link rel="icon" type="image/x-icon" href="/resources/favicon.ico">
 </head>
 <body>
-  <h1 class="name">
-    About
-  </h1>
-  <div class="desc">
-  <p>I'm a 21 year old naive optimist based in <em>Palo Alto, CA</em>. I currently do growth at <a href="https://buildspace.so/" target="_blank" class="company"><strong>Buildspace</strong></a>, YC S20 + a16z.</p>
-  <p>I enjoy building software people <s>want</s> love. In my past I studied computer science at NYU and led product at <a href="https://www.ycombinator.com/companies/hyper" target="_blank" class="company"><strong>Hyper</strong></a>, YC S21 — acquired in June. <sup>-yay!</sup></p>
-  <p>I write small grants (<$5k) to founders who do things that don't scale through <a href="https://x.com/feefifo_fund" target="_blank" class="company"><strong>Feefifo Fund</strong></a>, $150k AUM.</p>
-</div>
-  <p id="sign">
-Best,
-    <aside id="signature">Dante</aside>
-  </p>
-  <!-- Start Social Links -->
-        <div>
-            <section class="social">
-                <li><a class="social-link" href="mailto:dantelentinics@gmail.com" target="_blank">Email</a></li>
-                <li><a class="social-link" href="https://www.linkedin.com/in/lentinidante/" target="_blank">LinkedIn</a></li>
-                <li><a class="social-link" href="https://x.com/feefifo_fund" target="_blank">Fund</a></li>
-                <li><a id="modeToggle" class="social-link" href="#">dark-mode.exe</a></li>
-        </div>
-  <!-- End Social Links -->
+  <div class="container">
+    <h1 class="name">About</h1>
+    <div class="desc">
+      <p>I'm a 21 year old naive optimist based in <em>Palo Alto, CA</em>. I currently do growth at <a href="https://buildspace.so/" target="_blank" class="company"><strong>Buildspace</strong></a>, YC S20 + a16z.</p>
+      <p>I enjoy building software people <s>want</s> love. In my past I studied computer science at NYU and led product at <a href="https://www.ycombinator.com/companies/hyper" target="_blank" class="company"><strong>Hyper</strong></a>, YC S21 — acquired in June. <sup>-yay!</sup></p>
+      <p>I write small grants (<$5k) to founders who do things that don't scale through <a href="https://x.com/feefifo_fund" target="_blank" class="company"><strong>Feefifo Fund</strong></a>, $150k AUM.</p>
+    </div>
+    <p id="sign">Best,<aside id="signature">Dante</aside></p>
+    <!-- Start Social Links -->
+    <section class="social">
+      <li><a class="social-link" href="mailto:dantelentinics@gmail.com" target="_blank">Email</a></li>
+      <li><a class="social-link" href="https://www.linkedin.com/in/lentinidante/" target="_blank">LinkedIn</a></li>
+      <li><a class="social-link" href="https://x.com/feefifo_fund" target="_blank">Fund</a></li>
+      <li><a id="modeToggle" class="social-link" href="#">dark-mode.exe</a></li>
+    </section>
+    <!-- End Social Links -->
+  </div>
+
   <script>
     var toggleTimeout;  // Variable to store the timeout reference
 
@@ -50,158 +47,155 @@ Best,
             toggleTimeout = null; // Reset the timeout reference
         }
     });
-</script>
-<audio id="nightSound" src="/resources/night.mp3" preload="auto"></audio>
-</script>
-<audio id="nightSound" src="/resources/night.mp3" preload="auto"></audio>
-<script>
-  document.getElementById('modeToggle').addEventListener('click', function(event) {
-      event.preventDefault(); // Prevents the default link behavior
-      var audio = document.getElementById('nightSound');
+  </script>
+  <audio id="nightSound" src="/resources/night.mp3" preload="auto"></audio>
+  <script>
+    document.getElementById('modeToggle').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevents the default link behavior
+        var audio = document.getElementById('nightSound');
 
-      // Check if the audio is playing
-      if (!audio.paused) {
-          // If playing, pause it
-          audio.pause();
-          audio.currentTime = 0; // Optionally, reset the audio to the start
-      } else {
-          // If not playing, play the audio
-          audio.play();
-      }
-  });
-</script>
-<canvas id="starCanvas"></canvas>
-<script>
-  var starTimeout;
-  var starCanvas = document.getElementById('starCanvas');
-  var ctx = starCanvas.getContext('2d');
-
-  // Resize canvas to full window size
-  function resizeCanvas() {
-    starCanvas.width = window.innerWidth;
-    starCanvas.height = window.innerHeight;
-}
-
-window.addEventListener('resize', resizeCanvas);
-window.addEventListener('orientationchange', resizeCanvas);
-resizeCanvas(); // Call this function to set the initial size of the canvas
-
-
-  var stars = []; // Array to hold the stars
-  var shootingStars = []; // Array to hold the shooting stars
-
-  // Function to create a star
-  function Star(x, y, radius) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.alpha = Math.random();
-    this.alphaChange = Math.random() * 0.05;
-
-    this.draw = function() {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        ctx.fillStyle = '#fff';
-        ctx.fill();
-        ctx.restore();
-    }
-
-    this.update = function() {
-        this.alpha += this.alphaChange;
-        if (this.alpha <= 0.1 || this.alpha >= 1) {
-            this.alphaChange = -this.alphaChange;
+        // Check if the audio is playing
+        if (!audio.paused) {
+            // If playing, pause it
+            audio.pause();
+            audio.currentTime = 0; // Optionally, reset the audio to the start
+        } else {
+            // If not playing, play the audio
+            audio.play();
         }
-    }
-}
+    });
+  </script>
+  <canvas id="starCanvas"></canvas>
+  <script>
+    var starTimeout;
+    var starCanvas = document.getElementById('starCanvas');
+    var ctx = starCanvas.getContext('2d');
 
-  // Function to create a shooting star
-  function ShootingStar() {
-      this.x = Math.random() * starCanvas.width;
-      this.y = 0;
-      this.length = Math.random() * 80 + 10;
-      this.speed = Math.random() * 10 + 6;
-      this.alpha = 1;
+    // Resize canvas to full window size
+    function resizeCanvas() {
+      starCanvas.width = window.innerWidth;
+      starCanvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('orientationchange', resizeCanvas);
+    resizeCanvas(); // Call this function to set the initial size of the canvas
+
+    var stars = []; // Array to hold the stars
+    var shootingStars = []; // Array to hold the shooting stars
+
+    // Function to create a star
+    function Star(x, y, radius) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+      this.alpha = Math.random();
+      this.alphaChange = Math.random() * 0.05;
 
       this.draw = function() {
           ctx.save();
           ctx.globalAlpha = this.alpha;
           ctx.beginPath();
-          ctx.moveTo(this.x, this.y);
-          ctx.lineTo(this.x + this.length, this.y + this.length);
-          ctx.strokeStyle = '#fff';
-          ctx.lineWidth = 2;
-          ctx.stroke();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+          ctx.fillStyle = '#fff';
+          ctx.fill();
           ctx.restore();
-      };
+      }
 
       this.update = function() {
-          this.x += this.speed;
-          this.y += this.speed;
-          this.alpha -= 0.01;
-          if (this.alpha <= 0) {
-              this.reset();
+          this.alpha += this.alphaChange;
+          if (this.alpha <= 0.1 || this.alpha >= 1) {
+              this.alphaChange = -this.alphaChange;
           }
-      };
-
-      this.reset = function() {
-          this.x = Math.random() * starCanvas.width;
-          this.y = 0;
-          this.length = Math.random() * 80 + 10;
-          this.speed = Math.random() * 10 + 6;
-          this.alpha = 1;
       }
-  }
+    }
 
-  // Function to create stars
-  function createStars(count) {
-      for (var i = 0; i < count; i++) {
-          var x = Math.random() * starCanvas.width;
-          var y = Math.random() * starCanvas.height;
-          var radius = Math.random() * 1 + 1;
-          stars.push(new Star(x, y, radius));
-      }
-  }
+    // Function to create a shooting star
+    function ShootingStar() {
+        this.x = Math.random() * starCanvas.width;
+        this.y = 0;
+        this.length = Math.random() * 80 + 10;
+        this.speed = Math.random() * 10 + 6;
+        this.alpha = 1;
 
-  // Function to create shooting stars
-  function createShootingStars(count) {
-      for (var i = 0; i < count; i++) {
-          shootingStars.push(new ShootingStar());
-      }
-  }
+        this.draw = function() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x + this.length, this.y + this.length);
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.restore();
+        };
 
-  // Animation function
-  function animate() {
-    ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
-    stars.forEach(function(star) {
-        star.update(); // Update the star (for glimmering effect)
-        star.draw();
+        this.update = function() {
+            this.x += this.speed;
+            this.y += this.speed;
+            this.alpha -= 0.01;
+            if (this.alpha <= 0) {
+                this.reset();
+            }
+        };
+
+        this.reset = function() {
+            this.x = Math.random() * starCanvas.width;
+            this.y = 0;
+            this.length = Math.random() * 80 + 10;
+            this.speed = Math.random() * 10 + 6;
+            this.alpha = 1;
+        }
+    }
+
+    // Function to create stars
+    function createStars(count) {
+        for (var i = 0; i < count; i++) {
+            var x = Math.random() * starCanvas.width;
+            var y = Math.random() * starCanvas.height;
+            var radius = Math.random() * 1 + 1;
+            stars.push(new Star(x, y, radius));
+        }
+    }
+
+    // Function to create shooting stars
+    function createShootingStars(count) {
+        for (var i = 0; i < count; i++) {
+            shootingStars.push(new ShootingStar());
+        }
+    }
+
+    // Animation function
+    function animate() {
+      ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+      stars.forEach(function(star) {
+          star.update(); // Update the star (for glimmering effect)
+          star.draw();
+      });
+      shootingStars.forEach(function(shootingStar) {
+          shootingStar.update();
+          shootingStar.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    // Button click event handler
+    document.getElementById('modeToggle').addEventListener('click', function() {
+        if (!starTimeout) {
+            starTimeout = setTimeout(function() {
+                createStars(100); // Create 100 stars
+                createShootingStars(2); // Create 2 shooting stars
+                animate();
+            }, 6300); // Delay of 6.3 seconds
+        } else {
+            clearTimeout(starTimeout);
+            starTimeout = null;
+            ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+            stars = [];
+            shootingStars = [];
+        }
     });
-    shootingStars.forEach(function(shootingStar) {
-        shootingStar.update();
-        shootingStar.draw();
-    });
-    requestAnimationFrame(animate);
-}
-
-  // Button click event handler
-  document.getElementById('modeToggle').addEventListener('click', function() {
-      if (!starTimeout) {
-          starTimeout = setTimeout(function() {
-              createStars(100); // Create 100 stars
-              createShootingStars(2); // Create 2 shooting stars
-              animate();
-          }, 6300); // Delay of 6.3 seconds
-      } else {
-          clearTimeout(starTimeout);
-          starTimeout = null;
-          ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
-          stars = [];
-          shootingStars = [];
-      }
-  });
-  function resizeCanvas() {
+    function resizeCanvas() {
     var ratio = window.devicePixelRatio || 1;
     starCanvas.width = window.innerWidth * ratio;
     starCanvas.height = window.innerHeight * ratio;
