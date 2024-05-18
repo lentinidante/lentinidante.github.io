@@ -191,3 +191,8 @@ h1.name, .desc, #sign, .social {
   color: inherit; /* Use the current text color */
   text-decoration: none; /* Remove the underline */
 }
+
+#signature a:visited {
+  color: inherit; /* Ensure visited link has the same color */
+  text-decoration: none; /* Ensure visited link has no underline */
+}
