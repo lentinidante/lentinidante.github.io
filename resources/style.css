@@ -177,7 +177,7 @@ body * {
 
 /* Add this to your CSS file */
 .container {
-  max-width: 350px; /* Adjust as needed */
+  max-width: 359px; /* Adjust as needed */
   margin: 0 auto; /* Centers the container */
   padding: 0 20px; /* Adds some padding for better readability */
 }
