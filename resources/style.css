@@ -196,3 +196,10 @@ h1.name, .desc, #sign, .social {
   color: inherit; /* Ensure visited link has the same color */
   text-decoration: none; /* Ensure visited link has no underline */
 }
+
+.superscript-fix {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.5em; /* Adjust this value as needed */
+  font-size: 0.8em; /* Adjust the size to make it smaller if necessary */
+}
