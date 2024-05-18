@@ -186,3 +186,9 @@ h1.name, .desc, #sign, .social {
   max-width: 800px; /* Match this with the container max-width */
   margin: 0 auto; /* Center the content */
 }
+
+/* Add this style to ensure the link looks like regular text */
+#signature a {
+  color: inherit; /* Use the current text color */
+  text-decoration: none; /* Remove the underline */
+}
