@@ -121,7 +121,8 @@ h1 {
 }
 
 #sign, #signature {
-  line-height: 65%;
+  margin-top: 7px;
+  line-height: 100%;
 }
 
 #sign {
@@ -172,4 +173,16 @@ body * {
 .background-element {
     position: relative; /* or 'absolute', 'fixed', or 'sticky' */
     z-index: 0; /* Below the canvas */
+}
+
+/* Add this to your CSS file */
+.container {
+  max-width: 350px; /* Adjust as needed */
+  margin: 0 auto; /* Centers the container */
+  padding: 0 20px; /* Adds some padding for better readability */
+}
+
+h1.name, .desc, #sign, .social {
+  max-width: 800px; /* Match this with the container max-width */
+  margin: 0 auto; /* Center the content */
 }
