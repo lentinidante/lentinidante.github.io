@@ -179,7 +179,6 @@ body * {
 .container {
   max-width: 359px; /* Adjust as needed */
   margin: 0 auto; /* Centers the container */
-  padding: 0 20px; /* Adds some padding for better readability */
 }
 
 h1.name, .desc, #sign, .social {
