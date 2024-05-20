@@ -182,7 +182,7 @@ body * {
 }
 
 h1.name, .desc, #sign, .social {
-  max-width: 800px; /* Match this with the container max-width */
+  max-width: 359px; /* Match this with the container max-width */
   margin: 0 auto; /* Center the content */
 }
 
