@@ -3,8 +3,8 @@
 <head>
   <title>Dante Lentini</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="/assets/css/styles.css" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <link href="/resources/style.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/resources/favicon.ico">
 </head>
 <body>
   <div class="container">
@@ -34,10 +34,90 @@
     <!-- End Social Links -->
   </div>
 
-  <!-- Link to the external JavaScript file -->
-  <script src="script.js"></script>
-</body>
-</html>
+  <script>
+    var toggleTimeout;  // Variable to store the timeout reference
+
+    document.getElementById('modeToggle').addEventListener('click', function() {
+        // Check if dark mode is currently not active and no timeout is set
+        if (!document.body.classList.contains('dark-mode') && !toggleTimeout) {
+            // Set a new timeout for 7 seconds before turning on dark mode
+            toggleTimeout = setTimeout(function() {
+                document.body.classList.add('dark-mode');
+                toggleTimeout = null; // Reset the timeout reference after applying dark mode
+            }, 6300); // 7000 milliseconds = 7 seconds
+        } else {
+            // If dark mode is active or the button is clicked again during the delay:
+            // 1. Turn off dark mode immediately if it's active
+            // 2. Clear any existing timeout
+            if (document.body.classList.contains('dark-mode')) {
+                document.body.classList.remove('dark-mode');
+            }
+            clearTimeout(toggleTimeout);
+            toggleTimeout = null; // Reset the timeout reference
+        }
+    });
+  </script>
+  <audio id="nightSound" src="/resources/night.mp3" preload="auto"></audio>
+  <script>
+    document.getElementById('modeToggle').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevents the default link behavior
+        var audio = document.getElementById('nightSound');
+
+        // Check if the audio is playing
+        if (!audio.paused) {
+            // If playing, pause it
+            audio.pause();
+            audio.currentTime = 0; // Optionally, reset the audio to the start
+        } else {
+            // If not playing, play the audio
+            audio.play();
+        }
+    });
+  </script>
+  <canvas id="starCanvas"></canvas>
+  <script>
+    var starTimeout;
+    var starCanvas = document.getElementById('starCanvas');
+    var ctx = starCanvas.getContext('2d');
+
+    // Resize canvas to full window size
+    function resizeCanvas() {
+      starCanvas.width = window.innerWidth;
+      starCanvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('orientationchange', resizeCanvas);
+    resizeCanvas(); // Call this function to set the initial size of the canvas
+
+    var stars = []; // Array to hold the stars
+    var shootingStars = []; // Array to hold the shooting stars
+
+    // Function to create a star
+    function Star(x, y, radius) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+      this.alpha = Math.random();
+      this.alphaChange = Math.random() * 0.05;
+
+      this.draw = function() {
+          ctx.save();
+          ctx.globalAlpha = this.alpha;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+          ctx.fillStyle = '#fff';
+          ctx.fill();
+          ctx.restore();
+      }
+
+      this.update = function() {
+          this.alpha += this.alphaChange;
+          if (this.alpha <= 0.1 || this.alpha >= 1) {
+              this.alphaChange = -this.alphaChange;
+          }
+      }
+    }
 
     // Function to create a shooting star
     function ShootingStar() {
