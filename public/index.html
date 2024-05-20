@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dante Lentini</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/resources/style.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/resources/favicon.ico">
+</head>
+<body>
+  <div class="container">
+    <h1 class="name">About</h1>
+    <div class="desc">
+      <p>I'm a 21 year old naive optimist based in <em>Palo Alto, CA</em>. I currently do growth at <a href="https://buildspace.so/" target="_blank" class="company"><strong>Buildspace</strong></a>, YC S20 + a16z.</p>
+      <p>
+        I enjoy building software people <s>want</s> love. In my past I studied computer science at NYU and led product at 
+        <a href="https://www.ycombinator.com/companies/hyper" target="_blank" class="company"><strong>Hyper</strong></a>, YC S21 — acquired in June. 
+        <sup class="superscript-fix">-yay!</sup>
+      </p>
+      <p>I write small grants (<$5k) to founders who do things that don't scale through <a href="https://x.com/feefifo_fund" target="_blank" class="company"><strong>Feefifo Fund</strong></a>, $150k AUM.</p>
+    </div>
+    <p id="sign">
+        Best,<br>
+        <aside id="signature">
+          <a href="https://x.com/lentinidante" target="_blank">Dante</a>
+        </aside>
+      </p>
+    <!-- Start Social Links -->
+    <section class="social">
+      <li><a class="social-link" href="mailto:dantelentinics@gmail.com" target="_blank">Email</a></li>
+      <li><a class="social-link" href="https://www.linkedin.com/in/lentinidante/" target="_blank">LinkedIn</a></li>
+      <li><a class="social-link" href="https://x.com/feefifo_fund" target="_blank">Fund</a></li>
+      <li><a id="modeToggle" class="social-link" href="#">dark-mode.exe</a></li>
+    </section>
+    <!-- End Social Links -->
+  </div>
+
+  <!-- Link to the external JavaScript file -->
+  <script src="script.js"></script>
+</body>
+</html>
+
+    // Function to create a shooting star
+    function ShootingStar() {
+        this.x = Math.random() * starCanvas.width;
+        this.y = 0;
+        this.length = Math.random() * 80 + 10;
+        this.speed = Math.random() * 10 + 6;
+        this.alpha = 1;
+
+        this.draw = function() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x + this.length, this.y + this.length);
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.restore();
+        };
+
+        this.update = function() {
+            this.x += this.speed;
+            this.y += this.speed;
+            this.alpha -= 0.01;
+            if (this.alpha <= 0) {
+                this.reset();
+            }
+        };
+
+        this.reset = function() {
+            this.x = Math.random() * starCanvas.width;
+            this.y = 0;
+            this.length = Math.random() * 80 + 10;
+            this.speed = Math.random() * 10 + 6;
+            this.alpha = 1;
+        }
+    }
+
+    // Function to create stars
+    function createStars(count) {
+        for (var i = 0; i < count; i++) {
+            var x = Math.random() * starCanvas.width;
+            var y = Math.random() * starCanvas.height;
+            var radius = Math.random() * 1 + 1;
+            stars.push(new Star(x, y, radius));
+        }
+    }
+
+    // Function to create shooting stars
+    function createShootingStars(count) {
+        for (var i = 0; i < count; i++) {
+            shootingStars.push(new ShootingStar());
+        }
+    }
+
+    // Animation function
+    function animate() {
+      ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+      stars.forEach(function(star) {
+          star.update(); // Update the star (for glimmering effect)
+          star.draw();
+      });
+      shootingStars.forEach(function(shootingStar) {
+          shootingStar.update();
+          shootingStar.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    // Button click event handler
+    document.getElementById('modeToggle').addEventListener('click', function() {
+        if (!starTimeout) {
+            starTimeout = setTimeout(function() {
+                createStars(100); // Create 100 stars
+                createShootingStars(2); // Create 2 shooting stars
+                animate();
+            }, 6300); // Delay of 6.3 seconds
+        } else {
+            clearTimeout(starTimeout);
+            starTimeout = null;
+            ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+            stars = [];
+            shootingStars = [];
+        }
+    });
+    function resizeCanvas() {
+    var ratio = window.devicePixelRatio || 1;
+    starCanvas.width = window.innerWidth * ratio;
+    starCanvas.height = window.innerHeight * ratio;
+    starCanvas.style.width = window.innerWidth + 'px';
+    starCanvas.style.height = window.innerHeight + 'px';
+    ctx.scale(ratio, ratio);
+}
+</script>
+
+    </body>
+</html>
