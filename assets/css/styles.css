@@ -3,7 +3,7 @@
   font-family: "Family";
   font-style: normal;
   font-weight: 400;
-  src: url("../assets/fonts/family-regular.woff2") format("woff2")
+  src: url("../fonts/family-regular.woff2") format("woff2")
 }
 
 /* Body Bold "Family" Font */
@@ -11,7 +11,7 @@
   font-family: "Family";
   font-style: normal;
   font-weight: 700;
-  src: url("../assets/fonts/family-bold.woff2") format("woff2")
+  src: url("../fonts/family-bold.woff2") format("woff2")
 }
 /* Signature "Caveat" Font */
 @font-face {
