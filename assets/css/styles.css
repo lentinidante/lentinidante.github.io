@@ -134,20 +134,20 @@ h1 {
 
 body {
   background: radial-gradient(circle, #445dff, #0037ff, #7086ff);
-  background-size: 200% 200%;
+  background-size: 300% 300%;
   animation: gradientSwirl 10s infinite linear;
   color: #c2f6ff;
 }
 
 @keyframes gradientSwirl {
   0% {
-      background-position: 0% 50%;
+      background-position: 0% 0%;
   }
   50% {
-      background-position: 100% 50%;
+      background-position: 100% 100%;
   }
   100% {
-      background-position: 0% 50%;
+      background-position: 0% 0%;
   }
 }
 
