@@ -132,7 +132,17 @@ h1 {
   margin-bottom: -5px;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: radial-gradient(circle, #445dff, #0037ff, #7086ff);
   background-size: 200% 200%;
   animation: gradientSwirl 10s infinite linear;
