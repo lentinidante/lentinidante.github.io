@@ -133,8 +133,22 @@ h1 {
 }
 
 body {
-    background: linear-gradient(to top, #101c6d, #1334ae);
-    color: #c2f6ff;
+  background: radial-gradient(circle, #445dff, #0037ff, #7086ff);
+  background-size: 200% 200%;
+  animation: gradientSwirl 10s infinite linear;
+  color: #c2f6ff;
+}
+
+@keyframes gradientSwirl {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
 }
 
 body.dark-mode {
