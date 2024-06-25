@@ -216,3 +216,9 @@ h1.name, .desc, #sign, .social {
   top: -0.5em; /* Adjust this value as needed */
   font-size: 0.8em; /* Adjust the size to make it smaller if necessary */
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
