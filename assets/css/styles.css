@@ -133,7 +133,7 @@ h1 {
 }
 
 body {
-    background-color: rgb(0, 100, 230);
+    background: linear-gradient(to top, #101c6d, #1334ae);
     color: #c2f6ff;
 }
 
