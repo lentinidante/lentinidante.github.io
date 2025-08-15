@@ -33,7 +33,7 @@ body{
   margin:40px; padding:env(safe-area-inset);
   background:var(--bg); color:var(--fg);
   font-family:"Family",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  font-size:22px; -height:1.2;
+  font-size:22px; line-height:1.2;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 
   display:flex; align-items:center; justify-content:center; min-height:100dvh;
@@ -54,22 +54,36 @@ h1.name{
 }
 
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
-.desc .muted{ margin:14px 0 var(--gap-xs); color:var(--muted); }
+
+/* >>> Blank line above & below “Prior;” */
+.desc .muted{
+  margin:24px 0;           /* blank line feel */
+  color:var(--muted);
+}
 
 /* Links */
-a{ color:var(--link); text-decoration:under; text-under-offset:2px; }
+a{
+  color:var(--link);
+  text-decoration: underline;
+  text-underline-offset:2px;
+}
 a:hover{ color:var(--link-hover); }
-a:focus-visible{ out:2px dotted currentColor; out-offset:2px; }
+a:focus-visible{ outline:2px dotted currentColor; outline-offset:2px; }
 
-/* Company links (white, no under until hover) */
+/* Company links (white, no underline until hover) */
 a.company{ color:var(--fg-strong); text-decoration:none; }
-a.company:hover{ text-decoration:under; }
+a.company:hover{ text-decoration: underline; }
 
-/* Signature */
-#sign{ margin-top:var(--gap-lg); }
+/* Signature block */
+/* >>> Reduce space below “Best,” (works whether #sign is the <p> or a wrapper) */
+#sign{ margin-top:var(--gap-lg); margin-bottom:2px; }
+#sign p{ margin:0 0 2px; }        /* if #sign wraps a <p>Best,</p> */
 #signature{
-  margin-top:2px; font-family:"Caveat",cursive; font-size:30px;
-  color:var(--fg-strong); -height:1;
+  margin-top:0;                    /* pull signature closer */
+  font-family:"Caveat",cursive;
+  font-size:30px;
+  color:var(--fg-strong);
+  line-height:1;
 }
 #signature a,#signature a:visited{ color:inherit; text-decoration:none; }
 
@@ -78,7 +92,7 @@ a.company:hover{ text-decoration:under; }
   display:flex; gap:16px; list-style:none; padding:0; margin:var(--gap) 0 0;
 }
 .social-link{ font-size:18px; color:var(--link); }
-.social-link:hover{ color:var(--link-hover); text-decoration:over; }
+.social-link:hover{ color:var(--link-hover); text-decoration:overline; }
 
 /* ===== Stars behind everything ===== */
 #starCanvas{
@@ -91,4 +105,3 @@ body *{ position:relative; z-index:1; }
 body.dark-mode{ background:#0a0a0b; color:#f0f0f0; }
 body.dark-mode a, body.dark-mode .social-link{ color:#f0f0f0; }
 body.dark-mode a:hover, body.dark-mode .social-link:hover{ color:#fff; }
-
