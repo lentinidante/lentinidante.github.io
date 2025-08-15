@@ -1,141 +1,99 @@
 /* ===== Fonts ===== */
-@font-face {
-  font-family: "Family";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/family-regular.woff2") format("woff2");
+@font-face{
+  font-family:"Family"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("../fonts/family-regular.woff2") format("woff2");
 }
-@font-face {
-  font-family: "Family";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("../fonts/family-bold.woff2") format("woff2");
+@font-face{
+  font-family:"Family"; font-style:normal; font-weight:700; font-display:swap;
+  src:url("../fonts/family-bold.woff2") format("woff2");
 }
 /* Signature (Caveat) */
-@font-face {
-  font-family: "Caveat";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/caveat/v18/WnznHAc5bAfYB2QRah7pcpNvOx-pjfJ9eIWpYT5Kmgq3sw.woff2)
-       format("woff2");
+@font-face{
+  font-family:"Caveat"; font-style:normal; font-weight:400; font-display:swap;
+  src:url(https://fonts.gstatic.com/s/caveat/v18/WnznHAc5bAfYB2QRah7pcpNvOx-pjfJ9eIWpYT5Kmgq3sw.woff2) format("woff2");
 }
 
-/* ===== Theme vars (just labels; no visual change) ===== */
-:root {
-  --bg: rgb(0, 100, 230);
+/* ===== Theme (labels only) ===== */
+:root{
+  --bg: rgb(0,100,230);
   --fg: #cfeaff;
-  --fg-strong: #ffffff;
-  --link: #c2f6ff;
-  --link-hover: #ffffff;
-  --muted: #cfeaff;
-  --gap-sm: 12px;
-  --gap: 24px;
-  --gap-lg: 40px;
+  --fg-strong:#fff;
+  --link:#c2f6ff;
+  --link-hover:#fff;
+  --muted:#cfeaff;
+  --gap-xs:8px; --gap-sm:12px; --gap:16px; --gap-lg:32px;
 }
 
-/* ===== Base layout ===== */
-html, body { height: 100%; }
-html { box-sizing: border-box; }
-*, *::before, *::after { box-sizing: inherit; }
+html,body{height:100%}
+html{box-sizing:border-box}
+*,*::before,*::after{box-sizing:inherit}
 
-body {
-  margin: 40px;
-  padding: env(safe-area-inset);
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "Family", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-size: 22px;
-  line-height: 1.35;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ===== Base ===== */
+body{
+  margin:40px; padding:env(safe-area-inset);
+  background:var(--bg); color:var(--fg);
+  font-family:"Family",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  font-size:22px; line-height:1.3;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 
-  /* center column */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100dvh;
+  display:flex; align-items:center; justify-content:center; min-height:100dvh;
 }
 
-/* Container */
-.container {
-  max-width: 359px;
-  width: 100%;
-  margin: 0 auto;
-}
+/* Center column */
+.container{max-width:480px; width:100%; margin:0 auto;}
 
 /* ===== Typography & spacing ===== */
-h1.name {
-  margin: 0 0 var(--gap);
-  font-size: clamp(40px, 6vw, 64px);
-  color: var(--fg-strong);
-  line-height: 1.05;
+h1.name{
+  /* Always single line; scale down on tiny screens instead of wrapping */
+  margin:0 0 16px;
+  font-size:clamp(22px, 9.5vw, 64px);
+  line-height:1.02;
+  color:var(--fg-strong);
+  white-space:nowrap; overflow-wrap:normal;
 }
 
-.desc p { margin: 0 0 var(--gap-sm); }
-.desc .muted { margin: var(--gap) 0 var(--gap-sm); color: var(--muted); }
+.desc p{margin:0 0 var(--gap-xs); line-height:1.2;}
+.desc .muted{margin:14px 0 var(--gap-xs); color:var(--muted);}
 
 /* Links */
-a {
-  color: var(--link);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-a:hover { color: var(--link-hover); }
-a:focus-visible { outline: 2px dotted currentColor; outline-offset: 2px; }
+a{color:var(--link); text-decoration:underline; text-underline-offset:2px;}
+a:hover{color:var(--link-hover);}
+a:focus-visible{outline:2px dotted currentColor; outline-offset:2px;}
 
-/* Company links appear white */
-a.company { color: var(--fg-strong); text-decoration: none; }
-a.company:hover { text-decoration: underline; }
+/* Company links (white, no underline until hover) */
+a.company{color:var(--fg-strong); text-decoration:none;}
+a.company:hover{text-decoration:underline;}
 
 /* Signature */
-#sign { margin-top: var(--gap-lg); }
-#signature {
-  margin-top: 6px;
-  font-family: "Caveat", cursive;
-  font-size: 30px;
-  color: var(--fg-strong);
-  line-height: 1;
+#sign{margin-top:var(--gap-lg);}
+#signature{
+  margin-top:6px; font-family:"Caveat",cursive; font-size:30px;
+  color:var(--fg-strong); line-height:1;
 }
-#signature a,
-#signature a:visited { color: inherit; text-decoration: none; }
+#signature a,#signature a:visited{color:inherit; text-decoration:none;}
 
-/* Social links row */
-.social ul {
-  display: flex;
-  gap: 16px;
-  list-style: none;
-  padding: 0;
-  margin: var(--gap) 0 0;
+/* Social row */
+.social ul{
+  display:flex; gap:16px; list-style:none; padding:0; margin:var(--gap) 0 0;
 }
-.social-link { font-size: 18px; color: var(--link); }
-.social-link:hover { color: var(--link-hover); text-decoration: overline; }
+.social-link{font-size:18px; color:var(--link);}
+.social-link:hover{color:var(--link-hover); text-decoration:overline;}
 
-/* ===== Stars canvas behind everything ===== */
-#starCanvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none; /* never blocks clicks */
+/* ===== Stars behind everything ===== */
+#starCanvas{
+  position:fixed; inset:0; width:100%; height:100%;
+  z-index:0; pointer-events:none; /* never blocks clicks */
 }
-body * { position: relative; z-index: 1; }
+body *{position:relative; z-index:1;}
 
 /* ===== Dark mode (only when body has .dark-mode) ===== */
-body.dark-mode {
-  background: rgb(10, 10, 11);
-  color: #f0f0f0;
-}
-body.dark-mode a,
-body.dark-mode .social-link { color: #f0f0f0; }
-body.dark-mode a:hover,
-body.dark-mode .social-link:hover { color: #ffffff; }
+body.dark-mode{background:#0a0a0b; color:#f0f0f0;}
+body.dark-mode a, body.dark-mode .social-link{color:#f0f0f0;}
+body.dark-mode a:hover, body.dark-mode .social-link:hover{color:#fff;}
 
-/* Narrow screens */
-@media (max-width: 380px) {
-  body { margin: 24px; }
-  .social-link { font-size: 16px; }
+/* Small screens: keep single-line name with small margins */
+@media (max-width:380px){
+  body{margin:24px;}
+  .social-link{font-size:16px;}
+  /* still no wrapping; font scales via clamp() above */
 }
