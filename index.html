@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
+<head>
   <meta charset="UTF-8">
   <title>Dante Lentini</title>
   <link rel="canonical" href="https://dante.co/">
@@ -11,251 +11,144 @@
 
   <!-- ProfilePage Schema Start -->
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  "inLanguage": "en",
-  "dateModified": "2025-08-15",
-  "mainEntity": {
-    "@type": "Person",
-    "name": "Dante Lentini",
-    "alternateName": "lentinidante",
-    "url": "https://dante.co/",
-    "description": "Growth Hacker at Founders Inc, previously at Buildspace and Hyper",
-    "jobTitle": "Growth and GTM Engineering",
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Founders Inc",
-      "url": "https://f.inc/"
-    },
-    "homeLocation": {
-      "@type": "Place",
-      "name": "San Francisco, CA, USA"
-    },
-    "alumniOf": {
-      "@type": "CollegeOrUniversity",
-      "name": "New York University",
-      "url": "https://www.nyu.edu/"
-    },
-    "email": "mailto:dantelentinics@gmail.com",
-    "sameAs": [
-      "https://x.com/lentinidante",
-      "https://www.linkedin.com/in/lentinidante",
-      "https://github.com/lentinidante"
-    ]
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "inLanguage": "en",
+    "dateModified": "2025-08-15",
+    "mainEntity": {
+      "@type": "Person",
+      "@id": "https://dante.co/#dante",
+      "name": "Dante Lentini",
+      "alternateName": "lentinidante",
+      "url": "https://dante.co/",
+      "description": "Growth & GTM engineering at Founders Inc (ex-Buildspace, Hyper).",
+      "jobTitle": "Growth and GTM Engineering",
+      "worksFor": { "@type": "Organization", "name": "Founders Inc", "url": "https://f.inc/" },
+      "homeLocation": { "@type": "Place", "name": "San Francisco, CA, USA" },
+      "alumniOf": { "@type": "CollegeOrUniversity", "name": "New York University", "url": "https://www.nyu.edu/" },
+      "email": "mailto:dantelentinics@gmail.com",
+      "sameAs": [
+        "https://x.com/lentinidante",
+        "https://www.linkedin.com/in/lentinidante",
+        "https://github.com/lentinidante"
+      ]
+    }
   }
-}
-</script>
+  </script>
   <!-- ProfilePage Schema End -->
-  
 </head>
 <body>
   <div class="container">
     <h1 class="name">Dante Lentini</h1>
-    <br>
+
     <div class="desc">
       <p>Growth <a href="https://f.inc" target="_blank" rel="noopener noreferrer" class="company"><strong>Founders Inc</strong></a></p>
-       <p>Ex Growth <a href="https://buildspace.so" target="_blank" rel="noopener noreferrer" class="company"><strong>Buildspace</strong></a></p>
-      <br>Prior;</br>
-      <br>Product  
-        <a href="https://www.ycombinator.com/companies/hyper" target="_blank" rel="noopener noreferrer" class="company"><strong>Hyper</strong></a> (acq.)
-      </p>
+      <p>Ex Growth <a href="https://buildspace.so" target="_blank" rel="noopener noreferrer" class="company"><strong>Buildspace</strong></a></p>
+      <p class="muted">Prior;</p>
+      <p>Product <a href="https://www.ycombinator.com/companies/hyper" target="_blank" rel="noopener noreferrer" class="company"><strong>Hyper</strong></a> (acq.)</p>
     </div>
-    <p id="sign">
-      Best,<br>
+
+    <div id="sign">
+      <p>Best,</p>
       <aside id="signature">
         <a href="https://x.com/intent/follow?screen_name=lentinidante" target="_blank" rel="noopener noreferrer">Dante</a>
       </aside>
-    </p>
-    
+    </div>
+
     <!-- Start Social Links -->
     <nav class="social">
       <ul>
-<li><a class="social-link" href="mailto:dantelentinics@gmail.com" target="_blank" rel="noopener noreferrer">Email</a></li>
+        <li><a class="social-link" href="mailto:dantelentinics@gmail.com" target="_blank" rel="noopener noreferrer">Email</a></li>
         <li><a class="social-link" href="https://www.linkedin.com/in/lentinidante" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
         <li><a class="social-link" href="https://x.com/intent/follow?screen_name=lentinidante" target="_blank" rel="noopener noreferrer">X</a></li>
-        <li><a class="social-link" href="/momsaidhavefun.pdf" target="_blank" rel="noopener noreferrer"><3</a></li>
+        <li><a class="social-link" href="/momsaidhavefun.pdf" target="_blank" rel="noopener noreferrer">&lt;3</a></li>
         <li><a id="modeToggle" class="social-link" href="#">dark-mode.exe</a></li>
       </ul>
     </nav>
     <!-- End Social Links -->
-    
   </div>
 
   <audio id="nightSound" src="/assets/audio/dark-mode.mp3" preload="auto"></audio>
   <canvas id="starCanvas"></canvas>
   <script>
-    var toggleTimeout;  // Variable to store the timeout reference
+    var toggleTimeout;
 
-    document.getElementById('modeToggle').addEventListener('click', function() {
-      // Check if dark mode is currently not active and no timeout is set
+    document.getElementById('modeToggle').addEventListener('click', function(event) {
+      event.preventDefault();
+
       if (!document.body.classList.contains('dark-mode') && !toggleTimeout) {
-        // Set a new timeout for 7 seconds before turning on dark mode
         toggleTimeout = setTimeout(function() {
           document.body.classList.add('dark-mode');
-          toggleTimeout = null; // Reset the timeout reference after applying dark mode
-        }, 6300); // 6300 milliseconds = 6.3 seconds
+          toggleTimeout = null;
+        }, 6300);
       } else {
-        // If dark mode is active or the button is clicked again during the delay:
-        // 1. Turn off dark mode immediately if it's active
-        // 2. Clear any existing timeout
         if (document.body.classList.contains('dark-mode')) {
           document.body.classList.remove('dark-mode');
         }
         clearTimeout(toggleTimeout);
-        toggleTimeout = null; // Reset the timeout reference
+        toggleTimeout = null;
       }
-    });
 
-    document.getElementById('modeToggle').addEventListener('click', function(event) {
-      event.preventDefault(); // Prevents the default link behavior
       var audio = document.getElementById('nightSound');
-
-      // Check if the audio is playing
-      if (!audio.paused) {
-        // If playing, pause it
-        audio.pause();
-        audio.currentTime = 0; // Optionally, reset the audio to the start
-      } else {
-        // If not playing, play the audio
-        audio.play();
-      }
+      if (!audio.paused) { audio.pause(); audio.currentTime = 0; } else { audio.play(); }
     });
 
     var starTimeout;
     var starCanvas = document.getElementById('starCanvas');
     var ctx = starCanvas.getContext('2d');
 
-    // Resize canvas to full window size
     function resizeCanvas() {
       var ratio = window.devicePixelRatio || 1;
       starCanvas.width = window.innerWidth * ratio;
       starCanvas.height = window.innerHeight * ratio;
       starCanvas.style.width = window.innerWidth + 'px';
       starCanvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(1,0,0,1,0,0); // reset before scaling to avoid compounding
       ctx.scale(ratio, ratio);
     }
-
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('orientationchange', resizeCanvas);
-    resizeCanvas(); // Call this function to set the initial size of the canvas
+    resizeCanvas();
 
-    var stars = []; // Array to hold the stars
-    var shootingStars = []; // Array to hold the shooting stars
+    var stars = [], shootingStars = [];
 
-    // Function to create a star
     function Star(x, y, radius) {
-      this.x = x;
-      this.y = y;
-      this.radius = radius;
-      this.alpha = Math.random();
-      this.alphaChange = Math.random() * 0.05;
-
-      this.draw = function() {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        ctx.fillStyle = '#fff';
-        ctx.fill();
-        ctx.restore();
-      };
-
-      this.update = function() {
-        this.alpha += this.alphaChange;
-        if (this.alpha <= 0.1 || this.alpha >= 1) {
-          this.alphaChange = -this.alphaChange;
-        }
-      };
+      this.x = x; this.y = y; this.radius = radius;
+      this.alpha = Math.random(); this.alphaChange = Math.random() * 0.05;
+      this.draw = function() { ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.restore(); };
+      this.update = function() { this.alpha += this.alphaChange; if (this.alpha <= 0.1 || this.alpha >= 1) this.alphaChange = -this.alphaChange; };
     }
 
-    // Function to create a shooting star
     function ShootingStar() {
-      this.x = Math.random() * starCanvas.width;
-      this.y = 0;
-      this.length = Math.random() * 80 + 10;
-      this.speed = Math.random() * 10 + 6;
-      this.alpha = 1;
-
-      this.draw = function() {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x + this.length, this.y + this.length);
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.restore();
-      };
-
-      this.update = function() {
-        this.x += this.speed;
-        this.y += this.speed;
-        this.alpha -= 0.01;
-        if (this.alpha <= 0) {
-          this.reset();
-        }
-      };
-
-      this.reset = function() {
-        this.x = Math.random() * starCanvas.width;
-        this.y = 0;
-        this.length = Math.random() * 80 + 10;
-        this.speed = Math.random() * 10 + 6;
-        this.alpha = 1;
-      }
+      this.x = Math.random() * starCanvas.width; this.y = 0;
+      this.length = Math.random() * 80 + 10; this.speed = Math.random() * 10 + 6; this.alpha = 1;
+      this.draw = function() { ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.length, this.y + this.length); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); ctx.restore(); };
+      this.update = function() { this.x += this.speed; this.y += this.speed; this.alpha -= 0.01; if (this.alpha <= 0) this.reset(); };
+      this.reset = function() { this.x = Math.random() * starCanvas.width; this.y = 0; this.length = Math.random() * 80 + 10; this.speed = Math.random() * 10 + 6; this.alpha = 1; };
     }
 
-    // Function to create stars
     function createStars(count) {
-      for (var i = 0; i < count; i++) {
-        var x = Math.random() * starCanvas.width;
-        var y = Math.random() * starCanvas.height;
-        var radius = Math.random() * 1 + 1;
-        stars.push(new Star(x, y, radius));
-      }
+      for (var i = 0; i < count; i++) { stars.push(new Star(Math.random()*starCanvas.width, Math.random()*starCanvas.height, Math.random()*1 + 1)); }
     }
-
-    // Function to create shooting stars
     function createShootingStars(count) {
-      for (var i = 0; i < count; i++) {
-        shootingStars.push(new ShootingStar());
-      }
+      for (var i = 0; i < count; i++) { shootingStars.push(new ShootingStar()); }
     }
-
-    // Animation function
     function animate() {
       ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
-      stars.forEach(function(star) {
-        star.update(); // Update the star (for glimmering effect)
-        star.draw();
-      });
-      shootingStars.forEach(function(shootingStar) {
-        shootingStar.update();
-        shootingStar.draw();
-      });
+      stars.forEach(function(s){ s.update(); s.draw(); });
+      shootingStars.forEach(function(s){ s.update(); s.draw(); });
       requestAnimationFrame(animate);
     }
 
-    // Button click event handler
     document.getElementById('modeToggle').addEventListener('click', function() {
       if (!starTimeout) {
-        starTimeout = setTimeout(function() {
-          createStars(100); // Create 100 stars
-          createShootingStars(2); // Create 2 shooting stars
-          animate();
-        }, 6300); // Delay of 6.3 seconds
+        starTimeout = setTimeout(function(){ createStars(100); createShootingStars(2); animate(); }, 6300);
       } else {
-        clearTimeout(starTimeout);
-        starTimeout = null;
-        ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
-        stars = [];
-        shootingStars = [];
+        clearTimeout(starTimeout); starTimeout = null;
+        ctx.clearRect(0,0,starCanvas.width,starCanvas.height); stars = []; shootingStars = [];
       }
     });
   </script>
 </body>
 </html>
-
-
