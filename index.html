@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="assets/css/styles.css">
   <link rel="icon" href="/favicon.ico">
 
-  <!-- ProfilePage Schema Start -->
+  <!-- Structured data: ProfilePage -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -36,7 +36,7 @@
     }
   }
   </script>
-  <!-- ProfilePage Schema End -->
+  <!-- /Structured data -->
 </head>
 <body>
   <div class="container">
@@ -56,7 +56,7 @@
       </aside>
     </div>
 
-    <!-- Start Social Links -->
+    <!-- Social links -->
     <nav class="social">
       <ul>
         <li><a class="social-link" href="mailto:dantelentinics@gmail.com" target="_blank" rel="noopener noreferrer">Email</a></li>
@@ -66,13 +66,14 @@
         <li><a id="modeToggle" class="social-link" href="#">dark-mode.exe</a></li>
       </ul>
     </nav>
-    <!-- End Social Links -->
+    <!-- /Social links -->
   </div>
 
   <audio id="nightSound" src="/assets/audio/dark-mode.mp3" preload="auto"></audio>
   <canvas id="starCanvas"></canvas>
   <script>
-    var toggleTimeout;
+    // Dark mode toggle with audio
+    var toggleTimeout; // delay handle for theme switch
 
     document.getElementById('modeToggle').addEventListener('click', function(event) {
       event.preventDefault();
@@ -94,25 +95,28 @@
       if (!audio.paused) { audio.pause(); audio.currentTime = 0; } else { audio.play(); }
     });
 
-    var starTimeout;
+    // Starfield animation
+    var starTimeout; // delay handle for stars
     var starCanvas = document.getElementById('starCanvas');
     var ctx = starCanvas.getContext('2d');
 
+    // Resize canvas for device pixel ratio
     function resizeCanvas() {
       var ratio = window.devicePixelRatio || 1;
       starCanvas.width = window.innerWidth * ratio;
       starCanvas.height = window.innerHeight * ratio;
       starCanvas.style.width = window.innerWidth + 'px';
       starCanvas.style.height = window.innerHeight + 'px';
-      ctx.setTransform(1,0,0,1,0,0); // reset before scaling to avoid compounding
+      ctx.setTransform(1,0,0,1,0,0); // reset transform before scaling
       ctx.scale(ratio, ratio);
     }
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('orientationchange', resizeCanvas);
     resizeCanvas();
 
-    var stars = [], shootingStars = [];
+    var stars = [], shootingStars = []; // star collections
 
+    // Static star model
     function Star(x, y, radius) {
       this.x = x; this.y = y; this.radius = radius;
       this.alpha = Math.random(); this.alphaChange = Math.random() * 0.05;
@@ -120,6 +124,7 @@
       this.update = function() { this.alpha += this.alphaChange; if (this.alpha <= 0.1 || this.alpha >= 1) this.alphaChange = -this.alphaChange; };
     }
 
+    // Moving star model
     function ShootingStar() {
       this.x = Math.random() * starCanvas.width; this.y = 0;
       this.length = Math.random() * 80 + 10; this.speed = Math.random() * 10 + 6; this.alpha = 1;
@@ -128,12 +133,15 @@
       this.reset = function() { this.x = Math.random() * starCanvas.width; this.y = 0; this.length = Math.random() * 80 + 10; this.speed = Math.random() * 10 + 6; this.alpha = 1; };
     }
 
+    // Populate star arrays
     function createStars(count) {
       for (var i = 0; i < count; i++) { stars.push(new Star(Math.random()*starCanvas.width, Math.random()*starCanvas.height, Math.random()*1 + 1)); }
     }
     function createShootingStars(count) {
       for (var i = 0; i < count; i++) { shootingStars.push(new ShootingStar()); }
     }
+
+    // Render loop
     function animate() {
       ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
       stars.forEach(function(s){ s.update(); s.draw(); });
@@ -141,6 +149,7 @@
       requestAnimationFrame(animate);
     }
 
+    // Start or stop starfield on toggle
     document.getElementById('modeToggle').addEventListener('click', function() {
       if (!starTimeout) {
         starTimeout = setTimeout(function(){ createStars(100); createShootingStars(2); animate(); }, 6300);
