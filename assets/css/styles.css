@@ -1,4 +1,4 @@
-/* ===== Fonts ===== */
+/* ===== Font faces ===== */
 @font-face{
   font-family:"Family"; font-style:normal; font-weight:400; font-display:swap;
   src:url("../fonts/family-regular.woff2") format("woff2");
@@ -7,20 +7,20 @@
   font-family:"Family"; font-style:normal; font-weight:700; font-display:swap;
   src:url("../fonts/family-bold.woff2") format("woff2");
 }
-/* Signature (Caveat) */
+/* Signature font: Caveat */
 @font-face{
   font-family:"Caveat"; font-style:normal; font-weight:400; font-display:swap;
   src:url(https://fonts.gstatic.com/s/caveat/v18/WnznHAc5bAfYB2QRah7pcpNvOx-pjfJ9eIWpYT5Kmgq3sw.woff2) format("woff2");
 }
 
-/* ===== Theme (labels only) ===== */
+/* ===== Theme tokens ===== */
 :root{
   --bg: rgb(0,100,230);
-  --fg: rgb(194, 246, 255);       /* main body text */
+  --fg: rgb(194, 246, 255);       /* body text color */
   --fg-strong: #fff;
   --link: rgb(194, 246, 255);     /* link color */
-  --link-hover: #fff;
-  --muted: rgb(194, 246, 255);    /* muted text like “Prior;” */
+  --link-hover: #fff;             /* link hover color */
+  --muted: rgb(194, 246, 255);    /* muted text color */
   --gap-xs: 8px; --gap-sm: 12px; --gap: 16px; --gap-lg: 32px;
 }
 
@@ -37,7 +37,7 @@ body{
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 
   display:flex; align-items:center; justify-content:center; min-height:100dvh;
-  overflow-x:auto; /* allow horizontal scroll on very narrow screens */
+  overflow-x:auto; /* allow horizontal scroll on narrow screens */
 }
 
 /* Center column */
@@ -46,18 +46,18 @@ body{
 /* ===== Typography & spacing ===== */
 h1.name{
   margin:0 0 16px;
-  font-size:40px;          /* FIXED size */
+  font-size:40px;          /* heading size */
   line-height:1.02;
   color:var(--fg-strong);
-  white-space:nowrap;      /* never wrap */
+  white-space:nowrap;      /* prevent wrapping */
   overflow-wrap:normal;
 }
 
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
 
-/* >>> Blank line above & below “Prior;” */
+/* Spacing around “Prior;” */
 .desc .muted{
-  margin:24px 0;           /* blank line feel */
+  margin:24px 0;           /* blank line spacing */
   color:var(--muted);
 }
 
@@ -70,12 +70,12 @@ a{
 a:hover{ color:var(--link-hover); }
 a:focus-visible{ outline:2px dotted currentColor; outline-offset:2px; }
 
-/* Company links (white, no underline until hover) */
+/* Company links */
 a.company{ color:var(--fg-strong); text-decoration:none; }
 a.company:hover{ text-decoration: underline; }
 
 /* Signature block */
-/* >>> Reduce space below “Best,” */
+/* Spacing under “Best,” */
 #sign{ margin-top:var(--gap-lg); margin-bottom:2px; }
 #sign p{ margin:0 0 2px; }
 #signature{
@@ -94,10 +94,10 @@ a.company:hover{ text-decoration: underline; }
 .social-link{ font-size:18px; color:var(--link); }
 .social-link:hover{ color:var(--link-hover); text-decoration:overline; }
 
-/* ===== Stars behind everything ===== */
+/* ===== Star canvas ===== */
 #starCanvas{
   position:fixed; inset:0; width:100%; height:100%;
-  z-index:0; pointer-events:none; /* never blocks clicks */
+  z-index:0; pointer-events:none; /* pass-through clicks */
 }
 body *{ position:relative; z-index:1; }
 
@@ -106,7 +106,7 @@ body.dark-mode {
   background: #0a0a0b;
   color: #f0f0f0;
 
-  /* override theme vars in dark mode */
+  /* Theme tokens in dark mode */
   --fg: #f0f0f0;
   --muted: #f0f0f0;
   --link: #f0f0f0;
