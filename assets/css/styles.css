@@ -16,12 +16,12 @@
 /* ===== Theme (labels only) ===== */
 :root{
   --bg: rgb(0,100,230);
-  --fg: #cfeaff;
-  --fg-strong:#fff;
-  --link:#c2f6ff;
-  --link-hover:#fff;
-  --muted:#cfeaff;
-  --gap-xs:8px; --gap-sm:12px; --gap:16px; --gap-lg:32px;
+  --fg: rgb(194, 246, 255);       /* main body text */
+  --fg-strong: #fff;
+  --link: rgb(194, 246, 255);     /* link color */
+  --link-hover: #fff;
+  --muted: rgb(194, 246, 255);    /* muted text like “Prior;” */
+  --gap-xs: 8px; --gap-sm: 12px; --gap: 16px; --gap-lg: 32px;
 }
 
 html,body{height:100%}
@@ -75,11 +75,11 @@ a.company{ color:var(--fg-strong); text-decoration:none; }
 a.company:hover{ text-decoration: underline; }
 
 /* Signature block */
-/* >>> Reduce space below “Best,” (works whether #sign is the <p> or a wrapper) */
+/* >>> Reduce space below “Best,” */
 #sign{ margin-top:var(--gap-lg); margin-bottom:2px; }
-#sign p{ margin:0 0 2px; }        /* if #sign wraps a <p>Best,</p> */
+#sign p{ margin:0 0 2px; }
 #signature{
-  margin-top:0;                    /* pull signature closer */
+  margin-top:0;
   font-family:"Caveat",cursive;
   font-size:30px;
   color:var(--fg-strong);
@@ -101,7 +101,7 @@ a.company:hover{ text-decoration: underline; }
 }
 body *{ position:relative; z-index:1; }
 
-/* ===== Dark mode (only when body has .dark-mode) ===== */
+/* ===== Dark mode ===== */
 body.dark-mode{ background:#0a0a0b; color:#f0f0f0; }
 body.dark-mode a, body.dark-mode .social-link{ color:#f0f0f0; }
 body.dark-mode a:hover, body.dark-mode .social-link:hover{ color:#fff; }
