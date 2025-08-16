@@ -102,6 +102,22 @@ a.company:hover{ text-decoration: underline; }
 body *{ position:relative; z-index:1; }
 
 /* ===== Dark mode ===== */
-body.dark-mode{ background:#0a0a0b; color:#f0f0f0; }
-body.dark-mode a, body.dark-mode .social-link{ color:#f0f0f0; }
-body.dark-mode a:hover, body.dark-mode .social-link:hover{ color:#fff; }
+body.dark-mode {
+  background:#0a0a0b;
+  color:#f0f0f0;
+
+  /* override theme vars in dark mode */
+  --muted:#f0f0f0;
+  --link:#f0f0f0;
+  --link-hover:#fff;
+}
+
+body.dark-mode a,
+body.dark-mode .social-link {
+  color:var(--link);
+}
+
+body.dark-mode a:hover,
+body.dark-mode .social-link:hover {
+  color:var(--link-hover);
+}
