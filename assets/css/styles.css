@@ -63,9 +63,14 @@ h1.name{
 /* Interest buttons intentionally use default browser button styling. */
 
 .interest-trigger {
-  transform: scale(1.07);
-  transform-origin: center;
-  margin-right: 0.25em;
+  -webkit-appearance: button;
+  appearance: button;
+  background-color: #f0f0f0;
+  border: 1px solid #767676;
+  color: #000;
+  font: inherit;
+  line-height: normal;
+  padding: 0.15em 0.4em;
 }
 
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
@@ -224,6 +229,7 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
+
 
 
 
