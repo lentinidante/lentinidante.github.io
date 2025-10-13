@@ -61,13 +61,6 @@ h1.name{
 }
 
 /* Interest buttons intentionally use default browser button styling. */
-/* Keep default look & font; only match text size to the sentence */
-.interest-line button{
-  font-size: 1em;          /* equals .interest-line (20px) */
-  line-height: normal;     /* keep UA default line-height */
-  font-family: revert;     /* ignore any inherited custom font */
-  vertical-align: baseline;
-}
 
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
 
@@ -225,3 +218,4 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
+
