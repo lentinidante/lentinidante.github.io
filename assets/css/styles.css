@@ -61,19 +61,12 @@ h1.name{
 }
 
 /* Interest buttons intentionally use default browser button styling. */
-
-/* Make form controls inherit the surrounding font + size */
-button, input, select, textarea {
-  font: inherit;
-}
-
-/* Exact match to surrounding sentence */
-.interest-line button {
-  font: inherit;       /* same family + size as the text */
-  font-size: 1em;      /* remove the bump */
-  line-height: 1;      /* tighten the button’s height */
-  padding: 1px 6px;    /* smaller in-button whitespace */
-  vertical-align: baseline; /* aligns better with the text */
+/* Keep default look & font; only match text size to the sentence */
+.interest-line button{
+  font-size: 1em;          /* equals .interest-line (20px) */
+  line-height: normal;     /* keep UA default line-height */
+  font-family: revert;     /* ignore any inherited custom font */
+  vertical-align: baseline;
 }
 
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
@@ -232,4 +225,3 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
-
