@@ -60,27 +60,7 @@ h1.name{
   color:var(--fg);
 }
 
-.interest-trigger{
-  background:none;
-  border:none;
-  padding:0 4px;
-  font:inherit;
-  color:var(--fg-strong);
-  cursor:pointer;
-  text-decoration:underline;
-  text-underline-offset:3px;
-  transition:color 0.2s ease;
-}
-
-.interest-trigger:hover,
-.interest-trigger:focus-visible{
-  color:var(--link-hover);
-}
-
-.interest-trigger:focus-visible{
-  outline:2px dotted currentColor;
-  outline-offset:4px;
-}
+/* Interest buttons intentionally use default browser button styling. */
 
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
 
