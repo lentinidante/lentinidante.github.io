@@ -60,7 +60,28 @@ h1.name{
   color:var(--fg);
 }
 
-/* Interest buttons intentionally use default browser button styling. */
+/* Interest buttons use clean default styling with Arial font */
+.interest-trigger {
+  font-family: Arial, system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+  line-height: inherit;
+  color: #000;
+  background: #e8e8e8;
+  border: 1.2px solid #999;
+  border-radius: 3px;
+  padding: 0px 5px;
+  margin: 0;
+  margin-right: 1px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+}
+
+.interest-trigger:hover {
+  background: #d8d8d8;
+  border: 1.2px solid #000000;
+}
 
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
 
@@ -218,6 +239,7 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
+
 
 
 
