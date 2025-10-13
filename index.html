@@ -42,6 +42,14 @@
   <div class="container">
     <h1 class="name">Dante Lentini</h1>
 
+    <p class="interest-line">
+      I like to
+      <button class="interest-trigger" data-interest="read" type="button">read</button>,
+      <button class="interest-trigger" data-interest="write" type="button">write</button>,
+      and
+      <button class="interest-trigger" data-interest="listen" data-toggle="true" type="button">listen</button>.
+    </p>
+
     <div class="desc">
       <p>Growth + GTM <a href="https://f.inc" target="_blank" rel="noopener noreferrer" class="company"><strong>Founders Inc</strong></a></p>
       <p>Ex Growth <a href="https://buildspace.so" target="_blank" rel="noopener noreferrer" class="company"><strong>Buildspace</strong></a></p>
@@ -69,10 +77,111 @@
     <!-- /Social links -->
   </div>
 
+  <div class="floating-layer" aria-hidden="true">
+    <div class="floating-cluster" data-interest="read">
+      <span class="floating-item book" style="--x: 16%; --y: 24%; --rotation: -7deg; --image: url('/assets/images/books/book-01.jpg');"></span>
+      <span class="floating-item book" style="--x: 32%; --y: 12%; --rotation: 4deg; --image: url('/assets/images/books/book-02.jpg');"></span>
+      <span class="floating-item book" style="--x: 54%; --y: 22%; --rotation: -3deg; --image: url('/assets/images/books/book-03.jpg');"></span>
+      <span class="floating-item book" style="--x: 74%; --y: 18%; --rotation: 9deg; --image: url('/assets/images/books/book-04.jpg');"></span>
+      <span class="floating-item book" style="--x: 20%; --y: 58%; --rotation: 2deg; --image: url('/assets/images/books/book-05.jpg');"></span>
+      <span class="floating-item book" style="--x: 42%; --y: 66%; --rotation: -5deg; --image: url('/assets/images/books/book-06.jpg');"></span>
+      <span class="floating-item book" style="--x: 64%; --y: 60%; --rotation: 8deg; --image: url('/assets/images/books/book-07.jpg');"></span>
+      <span class="floating-item book" style="--x: 82%; --y: 68%; --rotation: -6deg; --image: url('/assets/images/books/book-08.jpg');"></span>
+    </div>
+
+    <div class="floating-cluster" data-interest="write">
+      <span class="floating-item paper" style="--x: 18%; --y: 22%; --rotation: 11deg;"></span>
+      <span class="floating-item paper" style="--x: 38%; --y: 18%; --rotation: -8deg;"></span>
+      <span class="floating-item paper" style="--x: 58%; --y: 26%; --rotation: 6deg;"></span>
+      <span class="floating-item paper" style="--x: 78%; --y: 22%; --rotation: -12deg;"></span>
+      <span class="floating-item paper" style="--x: 24%; --y: 62%; --rotation: -5deg;"></span>
+      <span class="floating-item paper" style="--x: 44%; --y: 68%; --rotation: 8deg;"></span>
+      <span class="floating-item paper" style="--x: 64%; --y: 58%; --rotation: -9deg;"></span>
+      <span class="floating-item paper" style="--x: 82%; --y: 70%; --rotation: 5deg;"></span>
+    </div>
+
+    <div class="floating-cluster" data-interest="listen">
+      <span class="floating-item album" style="--x: 18%; --y: 28%; --rotation: -4deg; --image: url('/assets/images/albums/album-01.jpg');"></span>
+      <span class="floating-item album" style="--x: 34%; --y: 14%; --rotation: 7deg; --image: url('/assets/images/albums/album-02.jpg');"></span>
+      <span class="floating-item album" style="--x: 56%; --y: 20%; --rotation: -9deg; --image: url('/assets/images/albums/album-03.jpg');"></span>
+      <span class="floating-item album" style="--x: 74%; --y: 26%; --rotation: 5deg; --image: url('/assets/images/albums/album-04.jpg');"></span>
+      <span class="floating-item album" style="--x: 20%; --y: 64%; --rotation: 9deg; --image: url('/assets/images/albums/album-05.jpg');"></span>
+      <span class="floating-item album" style="--x: 40%; --y: 72%; --rotation: -6deg; --image: url('/assets/images/albums/album-06.jpg');"></span>
+      <span class="floating-item album" style="--x: 60%; --y: 62%; --rotation: 3deg; --image: url('/assets/images/albums/album-07.jpg');"></span>
+      <span class="floating-item album" style="--x: 82%; --y: 74%; --rotation: -10deg; --image: url('/assets/images/albums/album-08.jpg');"></span>
+    </div>
+  </div>
+
   <audio id="nightSound" src="/assets/audio/dark-mode.mp3" preload="auto"></audio>
   <canvas id="starCanvas"></canvas>
 
   <script>
+    // Interactive interests flyouts
+    (function() {
+      var triggers = document.querySelectorAll('.interest-trigger');
+      if (!triggers.length) { return; }
+
+      var clusters = {};
+      document.querySelectorAll('.floating-cluster').forEach(function(cluster) {
+        var interest = cluster.getAttribute('data-interest');
+        if (interest) { clusters[interest] = cluster; }
+      });
+
+      var activeInterest = null;
+      var hideTimeout;
+
+      function clearAll() {
+        Object.keys(clusters).forEach(function(key) {
+          clusters[key].classList.remove('active');
+        });
+        activeInterest = null;
+      }
+
+      function activate(interest) {
+        if (!clusters[interest]) { return; }
+        clearTimeout(hideTimeout);
+        Object.keys(clusters).forEach(function(key) {
+          clusters[key].classList.toggle('active', key === interest);
+        });
+        activeInterest = interest;
+      }
+
+      function scheduleClear(interest, delay) {
+        clearTimeout(hideTimeout);
+        hideTimeout = setTimeout(function() {
+          if (interest && activeInterest && interest !== activeInterest) { return; }
+          clearAll();
+        }, delay || 0);
+      }
+
+      triggers.forEach(function(trigger) {
+        var interest = trigger.getAttribute('data-interest');
+        if (!interest) { return; }
+
+        if (interest === 'listen') {
+          trigger.addEventListener('click', function() {
+            if (activeInterest === 'listen') {
+              clearAll();
+            } else {
+              activate('listen');
+            }
+          });
+        } else {
+          trigger.addEventListener('mouseenter', function() { activate(interest); });
+          trigger.addEventListener('mouseleave', function() { scheduleClear(interest, 180); });
+          trigger.addEventListener('focus', function() { activate(interest); });
+          trigger.addEventListener('blur', function() { scheduleClear(interest, 180); });
+        }
+      });
+
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          clearTimeout(hideTimeout);
+          clearAll();
+        }
+      });
+    })();
+
     // Dark mode toggle with audio
     var toggleTimeout; // delay handle for theme switch
 
