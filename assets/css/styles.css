@@ -62,20 +62,6 @@ h1.name{
 
 /* Interest buttons intentionally use default browser button styling. */
 
-.interest-trigger {
-  display: inline-block; /* Ensures proper layout and sizing */
-  border: none; /* Removes the default border */
-  padding: 1rem 2rem; /* Adds internal spacing */
-  margin: 0; /* Removes default margin */
-  text-decoration: none; /* Removes any default text decoration */
-  background: #0069ed; /* Sets a background color */
-  color: #ffffff; /* Sets text color */
-  font-family: sans-serif; /* Sets a font family */
-  font-size: 1rem; /* Sets font size */
-  cursor: pointer; /* Changes cursor to a pointer on hover */
-  border-radius: 5px; /* Adds rounded corners */
-}
-
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
 
 /* Spacing around “Prior;” */
@@ -232,6 +218,7 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
+
 
 
 
