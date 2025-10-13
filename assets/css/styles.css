@@ -69,8 +69,8 @@ h1.name{
   color: #000;
   background: #e8e8e8;
   border: 1.2px solid #999;
-  border-radius: 3px;
-  padding: 0px 5px;
+  border-radius: 2px;
+  padding: 1px 6px;
   margin: 0;
   margin-right: 1px;
   cursor: pointer;
@@ -239,6 +239,7 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
+
 
 
 
