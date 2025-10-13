@@ -53,6 +53,35 @@ h1.name{
   overflow-wrap:normal;
 }
 
+.interest-line{
+  margin:0 0 var(--gap);
+  font-size:20px;
+  line-height:1.3;
+  color:var(--fg);
+}
+
+.interest-trigger{
+  background:none;
+  border:none;
+  padding:0 4px;
+  font:inherit;
+  color:var(--fg-strong);
+  cursor:pointer;
+  text-decoration:underline;
+  text-underline-offset:3px;
+  transition:color 0.2s ease;
+}
+
+.interest-trigger:hover,
+.interest-trigger:focus-visible{
+  color:var(--link-hover);
+}
+
+.interest-trigger:focus-visible{
+  outline:2px dotted currentColor;
+  outline-offset:4px;
+}
+
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
 
 /* Spacing around “Prior;” */
@@ -100,6 +129,92 @@ a.company:hover{ text-decoration: underline; }
   z-index:0; pointer-events:none; /* pass-through clicks */
 }
 body *{ position:relative; z-index:1; }
+
+.floating-layer,
+.floating-layer *{
+  position:absolute;
+  z-index:2;
+}
+
+.floating-layer{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+.floating-cluster{
+  inset:0;
+  opacity:0;
+  transition:opacity 0.25s ease;
+}
+
+.floating-cluster.active{
+  opacity:1;
+}
+
+.floating-item{
+  top:var(--y, 50%);
+  left:var(--x, 50%);
+  width:var(--width, 120px);
+  height:var(--height, 160px);
+  transform:translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(0.92);
+  transform-origin:center;
+  border-radius:12px;
+  background-color:rgba(255,255,255,0.35);
+  background-image:var(--image);
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 14px 30px rgba(10, 30, 60, 0.25);
+  opacity:0;
+  transition:opacity 0.35s ease, transform 0.35s ease;
+}
+
+.floating-cluster.active .floating-item{
+  opacity:1;
+  transform:translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
+}
+
+.floating-item.book{
+  --width:120px;
+  --height:168px;
+  border-radius:10px;
+}
+
+.floating-item.paper{
+  --width:132px;
+  --height:172px;
+  border-radius:6px;
+  background-image:
+    linear-gradient(135deg, rgba(255,255,255,0.9), rgba(230,240,255,0.65));
+  box-shadow:0 12px 28px rgba(12, 32, 66, 0.2);
+}
+
+.floating-item.paper::after{
+  content:"";
+  position:absolute;
+  inset:14px;
+  border-radius:4px;
+  border:1px dashed rgba(0, 32, 86, 0.3);
+}
+
+.floating-item.album{
+  --width:150px;
+  --height:150px;
+  border-radius:18px;
+}
+
+@media (max-width:640px){
+  .floating-item{
+    --width:90px;
+    --height:120px;
+    box-shadow:0 10px 18px rgba(10, 30, 60, 0.2);
+  }
+
+  .floating-item.album{
+    --width:110px;
+    --height:110px;
+  }
+}
 
 /* ===== Dark mode ===== */
 body.dark-mode {
