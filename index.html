@@ -187,27 +187,90 @@
       });
     })();
 
+    // Global function to control interest display for beat switching
+    var globalClusters = {};
+    document.querySelectorAll('.floating-cluster').forEach(function(cluster) {
+      var interest = cluster.getAttribute('data-interest');
+      if (interest) { globalClusters[interest] = cluster; }
+    });
+
+    function applyInterestGlobal(interest) {
+      Object.keys(globalClusters).forEach(function(key) {
+        globalClusters[key].classList.toggle('active', key === interest);
+      });
+      
+      // Also update button visual states
+      document.querySelectorAll('.interest-trigger').forEach(function(button) {
+        var buttonInterest = button.getAttribute('data-interest');
+        if (buttonInterest === interest) {
+          button.classList.add('beat-active');
+        } else {
+          button.classList.remove('beat-active');
+        }
+      });
+    }
+
     // Dark mode toggle with audio
     var toggleTimeout; // delay handle for theme switch
+    var beatInterval; // interval for beat-synchronized button switching
+    var currentBeatIndex = 0;
+    var interests = ['read', 'write', 'listen'];
+    var isAutoSwitching = false;
+
+    function startBeatSwitching() {
+      if (isAutoSwitching) return;
+      isAutoSwitching = true;
+      
+      // 118 BPM = 508ms per beat (60000ms ÷ 118 BPM)
+      var beatDuration = 60000 / 118;
+      
+      beatInterval = setInterval(function() {
+        // Cycle through interests: read -> write -> listen -> repeat
+        var currentInterest = interests[currentBeatIndex % interests.length];
+        applyInterestGlobal(currentInterest);
+        currentBeatIndex++;
+      }, beatDuration);
+    }
+
+    function stopBeatSwitching() {
+      if (!isAutoSwitching) return;
+      isAutoSwitching = false;
+      
+      if (beatInterval) {
+        clearInterval(beatInterval);
+        beatInterval = null;
+      }
+      
+      // Reset to no active interest
+      applyInterestGlobal(null);
+      currentBeatIndex = 0;
+    }
 
     document.getElementById('modeToggle').addEventListener('click', function(event) {
       event.preventDefault();
 
+      var audio = document.getElementById('nightSound');
+      
       if (!document.body.classList.contains('dark-mode') && !toggleTimeout) {
+        // Starting dark mode
+        audio.play();
         toggleTimeout = setTimeout(function() {
           document.body.classList.add('dark-mode');
+          // Start beat switching when dark mode activates (after the delay)
+          setTimeout(startBeatSwitching, 100); // Small delay to ensure dark mode is fully applied
           toggleTimeout = null;
         }, 6300);
       } else {
+        // Stopping dark mode
         if (document.body.classList.contains('dark-mode')) {
           document.body.classList.remove('dark-mode');
         }
         clearTimeout(toggleTimeout);
         toggleTimeout = null;
+        stopBeatSwitching();
+        audio.pause(); 
+        audio.currentTime = 0;
       }
-
-      var audio = document.getElementById('nightSound');
-      if (!audio.paused) { audio.pause(); audio.currentTime = 0; } else { audio.play(); }
     });
 
     // Starfield animation
@@ -276,10 +339,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
