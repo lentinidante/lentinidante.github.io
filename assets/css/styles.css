@@ -62,6 +62,12 @@ h1.name{
 
 /* Interest buttons intentionally use default browser button styling. */
 
+.interest-trigger {
+  transform: scale(1.07);
+  transform-origin: center;
+  margin-right: 0.25em;
+}
+
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
 
 /* Spacing around “Prior;” */
@@ -218,6 +224,7 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
+
 
 
 
