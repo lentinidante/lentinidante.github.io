@@ -83,6 +83,25 @@ h1.name{
   border: 1.2px solid #000000;
 }
 
+.interest-trigger:active {
+  background: #ddd;
+  border-color: #777;
+}
+
+.interest-trigger:focus {
+  outline: 1px dotted #666;
+  outline-offset: 1px;
+}
+
+.interest-trigger.beat-active {
+  background: #007acc;
+  color: #fff;
+  border: 1.2px solid #005a9e;
+  box-shadow: 0 0 8px rgba(0, 122, 204, 0.6);
+  transform: scale(1.05);
+  transition: all 0.1s ease;
+}
+
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
 
 /* Spacing around “Prior;” */
@@ -239,13 +258,3 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
-
-
-
-
-
-
-
-
-
-
