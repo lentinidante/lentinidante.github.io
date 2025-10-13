@@ -67,13 +67,13 @@ button, input, select, textarea {
   font: inherit;
 }
 
-/* Slightly larger labels just for the "read / write / listen" buttons */
-.interest-line button,
-.interest-line input[type="button"],
-.interest-line input[type="submit"]{
-  font-size: 1.05em;   /* use 1em for exact match with the sentence */
-  line-height: 1.1;    /* keeps the text vertically centered in the button */
-  padding: 2px 8px;    /* optional tweak so the buttons feel balanced */
+/* Exact match to surrounding sentence */
+.interest-line button {
+  font: inherit;       /* same family + size as the text */
+  font-size: 1em;      /* remove the bump */
+  line-height: 1;      /* tighten the button’s height */
+  padding: 1px 6px;    /* smaller in-button whitespace */
+  vertical-align: baseline; /* aligns better with the text */
 }
 
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
@@ -232,3 +232,4 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
+
