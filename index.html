@@ -128,56 +128,61 @@
       });
 
       var activeInterest = null;
+      var pinnedInterest = null;
       var hideTimeout;
 
-      function clearAll() {
-        Object.keys(clusters).forEach(function(key) {
-          clusters[key].classList.remove('active');
-        });
-        activeInterest = null;
-      }
-
-      function activate(interest) {
-        if (!clusters[interest]) { return; }
-        clearTimeout(hideTimeout);
+      function applyInterest(interest) {
         Object.keys(clusters).forEach(function(key) {
           clusters[key].classList.toggle('active', key === interest);
         });
         activeInterest = interest;
       }
 
-      function scheduleClear(interest, delay) {
+      function showInterest(interest) {
+        if (!clusters[interest]) { return; }
+        clearTimeout(hideTimeout);
+        applyInterest(interest);
+      }
+
+      function revertToPinned(delay) {
         clearTimeout(hideTimeout);
         hideTimeout = setTimeout(function() {
-          if (interest && activeInterest && interest !== activeInterest) { return; }
-          clearAll();
+          if (pinnedInterest && clusters[pinnedInterest]) {
+            applyInterest(pinnedInterest);
+          } else {
+            applyInterest(null);
+          }
         }, delay || 0);
+      }
+
+      function togglePinned(interest) {
+        if (!clusters[interest]) { return; }
+        clearTimeout(hideTimeout);
+        if (pinnedInterest === interest) {
+          pinnedInterest = null;
+          applyInterest(null);
+        } else {
+          pinnedInterest = interest;
+          applyInterest(interest);
+        }
       }
 
       triggers.forEach(function(trigger) {
         var interest = trigger.getAttribute('data-interest');
         if (!interest) { return; }
 
-        if (interest === 'listen') {
-          trigger.addEventListener('click', function() {
-            if (activeInterest === 'listen') {
-              clearAll();
-            } else {
-              activate('listen');
-            }
-          });
-        } else {
-          trigger.addEventListener('mouseenter', function() { activate(interest); });
-          trigger.addEventListener('mouseleave', function() { scheduleClear(interest, 180); });
-          trigger.addEventListener('focus', function() { activate(interest); });
-          trigger.addEventListener('blur', function() { scheduleClear(interest, 180); });
-        }
+        trigger.addEventListener('click', function() { togglePinned(interest); });
+        trigger.addEventListener('mouseenter', function() { showInterest(interest); });
+        trigger.addEventListener('mouseleave', function() { revertToPinned(180); });
+        trigger.addEventListener('focus', function() { showInterest(interest); });
+        trigger.addEventListener('blur', function() { revertToPinned(180); });
       });
 
       document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
           clearTimeout(hideTimeout);
-          clearAll();
+          pinnedInterest = null;
+          applyInterest(null);
         }
       });
     })();
