@@ -62,6 +62,20 @@ h1.name{
 
 /* Interest buttons intentionally use default browser button styling. */
 
+/* Make form controls inherit the surrounding font + size */
+button, input, select, textarea {
+  font: inherit;
+}
+
+/* Slightly larger labels just for the "read / write / listen" buttons */
+.interest-line button,
+.interest-line input[type="button"],
+.interest-line input[type="submit"]{
+  font-size: 1.05em;   /* use 1em for exact match with the sentence */
+  line-height: 1.1;    /* keeps the text vertically centered in the button */
+  padding: 2px 8px;    /* optional tweak so the buttons feel balanced */
+}
+
 .desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
 
 /* Spacing around “Prior;” */
@@ -195,6 +209,7 @@ body *{ position:relative; z-index:1; }
     --height:110px;
   }
 }
+
 
 /* ===== Dark mode ===== */
 body.dark-mode {
