@@ -33,7 +33,7 @@ body{
   margin:40px; padding:env(safe-area-inset);
   background:var(--bg); color:var(--fg);
   font-family:"Family",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  font-size:22px; line-height:1.2;
+  font-size:22px; line-height:1.1;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 
   display:flex; align-items:center; justify-content:center; min-height:100dvh;
@@ -56,12 +56,17 @@ body{
 }
 
 .interest-line{
-  margin:0 0 8px;
+  margin:16px 0 8px;
 }
 
 /* Even line spacing for paragraphs */
 p {
   margin: 8px 0;
+}
+
+/* Tighter spacing for main body paragraphs only */
+.container > p {
+  margin: 2px 0;
 }
 
 /* Signature block spacing */
