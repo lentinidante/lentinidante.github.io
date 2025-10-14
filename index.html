@@ -51,9 +51,9 @@
       and
       <button class="interest-trigger" data-interest="listen" data-toggle="true" type="button">listen</button>.
     </p>
-    <p>I'm a Growth Hacker. In my past, I dropped out, </p>
-    <p>made <a href="https://www.tiktok.com/@thesitesupply" target="_blank" rel="noopener noreferrer" class="link-plain-white">tiktoks</a>, and joined a <a href="https://www.ycombinator.com/companies/hyper" target="_blank" rel="noopener noreferrer" class="link-plain-white">startup</a>, but now  </p>
-    </p>I'm at <a href="https://f.inc" target="_blank" rel="noopener noreferrer" class="company"><strong>Founders, Inc</strong></a> (ex-<a href="https://buildspace.so" target="_blank" rel="noopener noreferrer" class="company"><strong>buildspace</strong></a>).</p>
+    <p>I'm a Growth Hacker. In my past, I</p>
+    <p>dropped out, made <a href="https://www.tiktok.com/@thesitesupply" target="_blank" rel="noopener noreferrer" class="link-plain-white">tiktoks</a>, and joined</p>
+    </p><a href="https://www.ycombinator.com/companies/hyper" target="_blank" rel="noopener noreferrer" class="link-plain-white">a startup</a>, but now I'm at <a href="https://f.inc" target="_blank" rel="noopener noreferrer" class="company"><strong>Founders, Inc</strong></a>.</p>
     <div id="sign">
       <p>Best,</p>
 
@@ -175,20 +175,23 @@
         }
       });
 
-      // Click outside buttons to unpin
-      document.addEventListener('click', function(event) {
-        // Ignore click-outside during dark mode beat switching
+      // Click outside buttons to unpin (handle both click and touch)
+      function handleOutsideInteraction(event) {
+        // Ignore during dark mode beat switching
         if (isAutoSwitching) return;
         
-        // Check if click is NOT on an interest button
+        // Check if click/touch is NOT on an interest button
         var clickedButton = event.target.closest('.interest-trigger');
         if (!clickedButton) {
-          // Clicked outside - unpin all buttons (but don't prevent default - let other clicks work)
+          // Clicked/touched outside - unpin all buttons
           document.querySelectorAll('.interest-trigger').forEach(function(btn){ 
             btn.classList.remove('pinned'); 
           });
         }
-      });
+      }
+      
+      document.addEventListener('click', handleOutsideInteraction);
+      document.addEventListener('touchstart', handleOutsideInteraction);
     })();
 
     // Global function to control interest display for beat switching
