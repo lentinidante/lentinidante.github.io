@@ -50,17 +50,27 @@ body{
 }
 
 /* ===== Typography & spacing ===== */
-h1.name{
-  margin:0 0 var(--gap);
-  font-size:40px;          /* heading size */
-  line-height:1.02;
-  color:var(--fg-strong);
-  white-space:nowrap;      /* prevent wrapping */
-  overflow-wrap:normal;
+.name {
+  color: #fff;
+  margin-bottom: 0;
 }
 
 .interest-line{
-  margin:0 0 4px;
+  margin:0 0 8px;
+}
+
+/* Even line spacing for paragraphs */
+p {
+  margin: 8px 0;
+}
+
+/* Signature block spacing */
+#sign{ 
+  margin: 8px 0; 
+}
+
+#sign p{ 
+  margin: 8px 0; 
 }
 
 /* Interest buttons use clean default styling with Arial font */
@@ -79,6 +89,8 @@ h1.name{
   cursor: pointer;
   text-align: center;
   display: inline-block;
+  width: 50px; /* Fixed width for consistent button sizes */
+  box-sizing: border-box;
   z-index: 3; /* ensure buttons sit above floating overlay */
 }
 
@@ -117,8 +129,8 @@ body.dark-mode .interest-trigger.beat-active {
   color: #fff !important;
   border: 1.2px solid #005a9e !important;
   box-shadow: 0 0 8px rgba(0, 122, 204, 0.6) !important;
-  transform: scale(1.05);
-  transition: all 0.1s ease;
+  /* Removed transform: scale(1.05) to prevent size changes */
+  transition: background 0.1s ease, color 0.1s ease, border 0.1s ease, box-shadow 0.1s ease;
 }
 
 
@@ -134,10 +146,10 @@ body.dark-mode .interest-trigger.beat-active {
   padding: 1px 6px !important;
   font-size: 15px !important;
   line-height: inherit !important;
-  width: auto !important;
+  width: 50px !important; /* Maintain fixed width */
   height: auto !important;
-  min-width: auto !important;
-  max-width: none !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
   box-sizing: border-box !important;
   will-change: background, border;
 }
@@ -159,10 +171,10 @@ body.dark-mode .interest-trigger.beat-active {
   padding: 1px 6px !important;
   font-size: 15px !important;
   line-height: inherit !important;
-  width: auto !important;
+  width: 50px !important; /* Maintain fixed width */
   height: auto !important;
-  min-width: auto !important;
-  max-width: none !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
   box-sizing: border-box !important;
   will-change: background, box-shadow;
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
@@ -222,10 +234,6 @@ body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[dat
 
 .desc p{ margin:0 0 4px; }
 
-/* Spacing around "Prior;" */
-.desc .muted{
-  color:var(--muted);
-}
 
 /* Superscript styling to maintain line spacing */
 sup {
@@ -249,9 +257,13 @@ a:focus-visible{ outline:2px dotted currentColor; outline-offset:2px; }
 a.company{ color:var(--fg-strong); text-decoration:none; }
 a.company:hover{ text-decoration: underline; }
 
+/* Plain white links (no underline, no hover change) */
+a.link-plain-white{ color:var(--fg-strong); text-decoration:none; }
+a.link-plain-white:hover{ color:var(--fg-strong); text-decoration:underline; text-underline-offset:2px; }
+
 /* Signature block */
-/* Spacing under “Best,” */
-#sign{ margin-top:var(--gap); margin-bottom:0; }
+/* Spacing under "Best," */
+#sign{ margin-top:var(--gap); margin-bottom:var(--gap); }
 #sign p{ margin:0 0 2px; }
 #signature{
   margin-top:0;
@@ -261,6 +273,43 @@ a.company:hover{ text-decoration: underline; }
   line-height:1;
 }
 #signature a,#signature a:visited{ color:inherit; text-decoration:none; }
+
+/* Add spacing between signature and current work */
+#sign p:nth-last-child(2) {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+/* Past work styling - faded appearance */
+.past-work {
+  opacity: 0.6;
+  color: rgba(194, 246, 255, 0.7);
+  margin-top: 2px;
+  margin-bottom: 4px;
+}
+
+.past-work a.company {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.past-work a.company:hover {
+  color: rgba(255, 255, 255, 1);
+  opacity: 1;
+}
+
+/* Dark mode past work styling */
+body.dark-mode .past-work {
+  color: rgba(240, 240, 240, 0.6);
+}
+
+body.dark-mode .past-work a.company {
+  color: rgba(240, 240, 240, 0.7);
+}
+
+body.dark-mode .past-work a.company:hover {
+  color: rgba(240, 240, 240, 1);
+  opacity: 1;
+}
 
 /* Social row */
 .social ul{
@@ -392,52 +441,52 @@ body.dark-mode .floating-cluster[data-interest="listen"] .floating-item {
   position: absolute;
 }
 
-/* Organic positioning for albums in dark mode - spread towards edges with varied floating */
+/* Radial positioning for albums in dark mode - evenly spaced around screen */
 body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(1) {
-  top: 12%;
-  left: 18%;
+  top: 20%;
+  left: 20%;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
   animation: float-1 28s ease-in-out infinite;
 }
 body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(2) {
-  top: 8%;
-  left: 52%;
+  top: 20%;
+  left: 80%;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
   animation: float-2 35s ease-in-out infinite;
 }
 body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(3) {
-  top: 15%;
-  left: 84%;
+  top: 80%;
+  left: 80%;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
   animation: float-3 31s ease-in-out infinite;
 }
 body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(4) {
-  top: 48%;
-  left: 88%;
+  top: 80%;
+  left: 20%;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
   animation: float-4 26s ease-in-out infinite;
 }
 body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(5) {
-  top: 82%;
-  left: 78%;
+  top: 50%;
+  left: 8%;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
   animation: float-5 33s ease-in-out infinite;
 }
 body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(6) {
-  top: 86%;
-  left: 45%;
+  top: 50%;
+  left: 92%;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
   animation: float-6 29s ease-in-out infinite;
 }
 body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(7) {
-  top: 78%;
-  left: 14%;
+  top: 8%;
+  left: 50%;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
   animation: float-7 34s ease-in-out infinite;
 }
 body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(8) {
-  top: 44%;
-  left: 10%;
+  top: 92%;
+  left: 50%;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
   animation: float-8 30s ease-in-out infinite;
 }
@@ -542,38 +591,38 @@ body.dark-mode .floating-cluster[data-interest="listen"] .floating-item.clickabl
     --height:110px;
   }
 
-  /* Adjusted positioning for mobile in dark mode - keep them closer to edges */
+  /* Radial positioning for mobile in dark mode - evenly spaced around screen */
   body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(1) {
-    top: 10%;
-    left: 12%;
+    top: 20%;
+    left: 20%;
   }
   body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(2) {
-    top: 6%;
-    left: 52%;
+    top: 20%;
+    left: 80%;
   }
   body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(3) {
-    top: 12%;
-    left: 88%;
+    top: 80%;
+    left: 80%;
   }
   body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(4) {
-    top: 46%;
-    left: 90%;
+    top: 80%;
+    left: 20%;
   }
   body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(5) {
-    top: 86%;
-    left: 82%;
+    top: 50%;
+    left: 8%;
   }
   body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(6) {
-    top: 90%;
-    left: 48%;
+    top: 50%;
+    left: 92%;
   }
   body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(7) {
-    top: 82%;
-    left: 10%;
+    top: 8%;
+    left: 50%;
   }
   body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(8) {
-    top: 42%;
-    left: 8%;
+    top: 92%;
+    left: 50%;
   }
 }
 
