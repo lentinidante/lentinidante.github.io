@@ -41,7 +41,13 @@ body{
 }
 
 /* Center column */
-.container{max-width:520px; width:100%; margin:0 auto;}
+.container{
+  max-width:520px; 
+  width:100%; 
+  margin:0 auto;
+  position: relative;
+  z-index: 5;
+}
 
 /* ===== Typography & spacing ===== */
 h1.name{
@@ -58,6 +64,11 @@ h1.name{
   font-size:20px;
   line-height:1.3;
   color:var(--fg);
+  display: block;
+}
+
+.interest-line p {
+  margin: 0;
 }
 
 /* Interest buttons use clean default styling with Arial font */
@@ -76,12 +87,28 @@ h1.name{
   cursor: pointer;
   text-align: center;
   display: inline-block;
+  z-index: 3; /* ensure buttons sit above floating overlay */
 }
 
 .interest-trigger:hover {
   background: #d8d8d8;
   border: 1.2px solid #000000;
 }
+
+/* Dark mode button styling */
+body.dark-mode .interest-trigger {
+  color: #f0f0f0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.2px solid rgba(255, 255, 255, 0.3);
+  pointer-events: none; /* Disable during beat switching */
+  cursor: default;
+}
+
+body.dark-mode .interest-trigger:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.2px solid rgba(255, 255, 255, 0.4);
+}
+
 
 .interest-trigger:active {
   background: #ddd;
@@ -93,13 +120,52 @@ h1.name{
   outline-offset: 1px;
 }
 
-.interest-trigger.beat-active {
-  background: #007acc;
-  color: #fff;
-  border: 1.2px solid #005a9e;
-  box-shadow: 0 0 8px rgba(0, 122, 204, 0.6);
+.interest-trigger.beat-active,
+body.dark-mode .interest-trigger.beat-active {
+  background: #007acc !important;
+  color: #fff !important;
+  border: 1.2px solid #005a9e !important;
+  box-shadow: 0 0 8px rgba(0, 122, 204, 0.6) !important;
   transform: scale(1.05);
   transition: all 0.1s ease;
+}
+
+/* Pinned visual state for interest buttons - same as hover */
+.interest-trigger.pinned{
+  background: #d8d8d8;
+  border: 1.2px solid #000000;
+}
+
+/* Pure CSS hover - VISUAL ONLY on hover, INTERACTIVE when pinned */
+
+/* Show clusters visually on hover (no interaction) */
+body:has(.interest-trigger[data-interest="read"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="read"],
+body:has(.interest-trigger[data-interest="write"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="write"],
+body:has(.interest-trigger[data-interest="listen"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="listen"] {
+  opacity: 1;
+  pointer-events: none; /* VISUAL ONLY - not clickable on hover */
+}
+
+body:has(.interest-trigger[data-interest="read"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="read"] .floating-item,
+body:has(.interest-trigger[data-interest="write"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="write"] .floating-item,
+body:has(.interest-trigger[data-interest="listen"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="listen"] .floating-item {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
+}
+
+/* Show clusters interactively when button is pinned */
+body:has(.interest-trigger[data-interest="read"].pinned) .floating-cluster[data-interest="read"],
+body:has(.interest-trigger[data-interest="write"].pinned) .floating-cluster[data-interest="write"],
+body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[data-interest="listen"] {
+  opacity: 1;
+  pointer-events: auto; /* INTERACTIVE when pinned */
+}
+
+body:has(.interest-trigger[data-interest="read"].pinned) .floating-cluster[data-interest="read"] .floating-item,
+body:has(.interest-trigger[data-interest="write"].pinned) .floating-cluster[data-interest="write"] .floating-item,
+body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[data-interest="listen"] .floating-item {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
 }
 
 
@@ -150,6 +216,22 @@ a.company:hover{ text-decoration: underline; }
   z-index:0; pointer-events:none; /* pass-through clicks */
 }
 body *{ position:relative; z-index:1; }
+
+/* Ensure links and interactive elements are clickable above everything */
+a, 
+a.company,
+a.social-link,
+.social-link, 
+#modeToggle, 
+button:not(.interest-trigger),
+nav,
+nav *,
+.social,
+.social * {
+  z-index: 100 !important;
+  position: relative !important;
+  pointer-events: auto !important; /* Always clickable */
+}
 
 .floating-layer,
 .floating-layer *{
@@ -228,12 +310,13 @@ body *{ position:relative; z-index:1; }
 
 .floating-item.clickable-album{
   cursor: pointer;
-  pointer-events: none;
+  pointer-events: none; /* Not clickable by default (when invisible) */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.floating-cluster.active .floating-item.clickable-album{
-  pointer-events: auto;
+/* Albums only clickable when their cluster is shown and interactive (pinned) */
+body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[data-interest="listen"] .floating-item.clickable-album {
+  pointer-events: auto; /* Now clickable when pinned */
 }
 
 
@@ -241,7 +324,12 @@ body *{ position:relative; z-index:1; }
   box-shadow: 0 18px 35px rgba(10, 30, 60, 0.35);
 }
 
+.floating-item.clickable-album.album-hover{
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1.05);
+}
+
 .floating-item.clickable-album.playing{
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
   box-shadow: 0 0 20px rgba(0, 122, 204, 0.8), 0 18px 35px rgba(10, 30, 60, 0.4);
   animation: pulse 2s ease-in-out infinite;
 }
