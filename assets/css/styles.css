@@ -223,6 +223,27 @@ body *{ position:relative; z-index:1; }
   border-radius:18px;
 }
 
+.floating-item.clickable-album{
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.floating-item.clickable-album:hover{
+  box-shadow: 0 18px 35px rgba(10, 30, 60, 0.35);
+}
+
+.floating-item.clickable-album.playing{
+  box-shadow: 0 0 20px rgba(0, 122, 204, 0.8), 0 18px 35px rgba(10, 30, 60, 0.4);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 20px rgba(0, 122, 204, 0.8), 0 18px 35px rgba(10, 30, 60, 0.4); }
+  50% { box-shadow: 0 0 30px rgba(0, 122, 204, 1), 0 18px 35px rgba(10, 30, 60, 0.4); }
+  100% { box-shadow: 0 0 20px rgba(0, 122, 204, 0.8), 0 18px 35px rgba(10, 30, 60, 0.4); }
+}
+
 @media (max-width:640px){
   .floating-item{
     --width:90px;
