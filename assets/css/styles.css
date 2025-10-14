@@ -228,8 +228,12 @@ body *{ position:relative; z-index:1; }
 
 .floating-item.clickable-album{
   cursor: pointer;
-  pointer-events: auto;
+  pointer-events: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.floating-cluster.active .floating-item.clickable-album{
+  pointer-events: auto;
 }
 
 
