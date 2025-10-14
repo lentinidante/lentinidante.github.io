@@ -49,6 +49,7 @@
       and
       <button class="interest-trigger" data-interest="listen" data-toggle="true" type="button">listen</button>.
     </p>
+    
 
     <div class="desc">
       <p>Growth + GTM <a href="https://f.inc" target="_blank" rel="noopener noreferrer" class="company"><strong>Founders Inc</strong></a></p>
@@ -352,8 +353,24 @@
     (function() {
       var albumCovers = document.querySelectorAll('.clickable-album');
       var currentlyPlaying = null;
+      var audioContext = null;
       
       if (!albumCovers.length) { return; }
+      
+      // Initialize audio context immediately
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === 'suspended') {
+          // Resume on first user interaction
+          document.addEventListener('click', function() {
+            if (audioContext.state === 'suspended') {
+              audioContext.resume();
+            }
+          }, { once: true });
+        }
+      } catch (e) {
+        // Fallback for browsers without Web Audio API
+      }
       
       albumCovers.forEach(function(album) {
         album.addEventListener('click', function(event) {
@@ -368,7 +385,6 @@
           if (currentlyPlaying && currentlyPlaying !== audio) {
             currentlyPlaying.pause();
             currentlyPlaying.currentTime = 0;
-            // Remove playing state from previous album
             var previousAlbum = document.querySelector('.clickable-album[data-track="' + currentlyPlaying.id + '"]');
             if (previousAlbum) {
               previousAlbum.classList.remove('playing');
@@ -377,9 +393,20 @@
           
           // Toggle current track
           if (audio.paused) {
-            audio.play();
-            album.classList.add('playing');
-            currentlyPlaying = audio;
+            var playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+              playPromise.then(function() {
+                album.classList.add('playing');
+                currentlyPlaying = audio;
+              }).catch(function() {
+                // Silently handle autoplay blocking - try again on next interaction
+                audio.currentTime = 0;
+              });
+            } else {
+              album.classList.add('playing');
+              currentlyPlaying = audio;
+            }
           } else {
             audio.pause();
             audio.currentTime = 0;
