@@ -101,18 +101,29 @@
     </div>
 
     <div class="floating-cluster" data-interest="listen">
-      <span class="floating-item album" style="--x: 18%; --y: 28%; --rotation: -4deg; --image: url('/assets/images/albums/album-01.jpg');"></span>
-      <span class="floating-item album" style="--x: 34%; --y: 14%; --rotation: 7deg; --image: url('/assets/images/albums/album-02.jpg');"></span>
-      <span class="floating-item album" style="--x: 56%; --y: 20%; --rotation: -9deg; --image: url('/assets/images/albums/album-03.jpg');"></span>
-      <span class="floating-item album" style="--x: 74%; --y: 26%; --rotation: 5deg; --image: url('/assets/images/albums/album-04.jpg');"></span>
-      <span class="floating-item album" style="--x: 20%; --y: 64%; --rotation: 9deg; --image: url('/assets/images/albums/album-05.jpg');"></span>
-      <span class="floating-item album" style="--x: 40%; --y: 72%; --rotation: -6deg; --image: url('/assets/images/albums/album-06.jpg');"></span>
-      <span class="floating-item album" style="--x: 60%; --y: 62%; --rotation: 3deg; --image: url('/assets/images/albums/album-07.jpg');"></span>
-      <span class="floating-item album" style="--x: 82%; --y: 74%; --rotation: -10deg; --image: url('/assets/images/albums/album-08.jpg');"></span>
+      <span class="floating-item album clickable-album" data-track="track-01" style="--x: 18%; --y: 28%; --rotation: -4deg; --image: url('/assets/images/albums/album-01.jpg');"></span>
+      <span class="floating-item album clickable-album" data-track="track-02" style="--x: 34%; --y: 14%; --rotation: 7deg; --image: url('/assets/images/albums/album-02.jpg');"></span>
+      <span class="floating-item album clickable-album" data-track="track-03" style="--x: 56%; --y: 20%; --rotation: -9deg; --image: url('/assets/images/albums/album-03.jpg');"></span>
+      <span class="floating-item album clickable-album" data-track="track-04" style="--x: 74%; --y: 26%; --rotation: 5deg; --image: url('/assets/images/albums/album-04.jpg');"></span>
+      <span class="floating-item album clickable-album" data-track="track-05" style="--x: 20%; --y: 64%; --rotation: 9deg; --image: url('/assets/images/albums/album-05.jpg');"></span>
+      <span class="floating-item album clickable-album" data-track="track-06" style="--x: 40%; --y: 72%; --rotation: -6deg; --image: url('/assets/images/albums/album-06.jpg');"></span>
+      <span class="floating-item album clickable-album" data-track="track-07" style="--x: 60%; --y: 62%; --rotation: 3deg; --image: url('/assets/images/albums/album-07.jpg');"></span>
+      <span class="floating-item album clickable-album" data-track="track-08" style="--x: 82%; --y: 74%; --rotation: -10deg; --image: url('/assets/images/albums/album-08.jpg');"></span>
     </div>
   </div>
 
   <audio id="nightSound" src="/assets/audio/dark-mode.mp3" preload="auto"></audio>
+  
+  <!-- Album track audio elements -->
+  <audio id="track-01" src="/assets/audio/track-01.mp3" preload="auto"></audio>
+  <audio id="track-02" src="/assets/audio/track-02.mp3" preload="auto"></audio>
+  <audio id="track-03" src="/assets/audio/track-03.mp3" preload="auto"></audio>
+  <audio id="track-04" src="/assets/audio/track-04.mp3" preload="auto"></audio>
+  <audio id="track-05" src="/assets/audio/track-05.mp3" preload="auto"></audio>
+  <audio id="track-06" src="/assets/audio/track-06.mp3" preload="auto"></audio>
+  <audio id="track-07" src="/assets/audio/track-07.mp3" preload="auto"></audio>
+  <audio id="track-08" src="/assets/audio/track-08.mp3" preload="auto"></audio>
+  
   <canvas id="starCanvas"></canvas>
 
   <script>
@@ -336,6 +347,74 @@
         ctx.clearRect(0,0,starCanvas.width,starCanvas.height); stars = []; shootingStars = [];
       }
     });
+
+    // Album track audio functionality
+    (function() {
+      var albumCovers = document.querySelectorAll('.clickable-album');
+      var currentlyPlaying = null;
+      
+      if (!albumCovers.length) { return; }
+      
+      albumCovers.forEach(function(album) {
+        album.addEventListener('click', function(event) {
+          event.stopPropagation();
+          
+          var trackId = album.getAttribute('data-track');
+          var audio = document.getElementById(trackId);
+          
+          if (!audio) { return; }
+          
+          // Stop any currently playing track
+          if (currentlyPlaying && currentlyPlaying !== audio) {
+            currentlyPlaying.pause();
+            currentlyPlaying.currentTime = 0;
+            // Remove playing state from previous album
+            var previousAlbum = document.querySelector('.clickable-album[data-track="' + currentlyPlaying.id + '"]');
+            if (previousAlbum) {
+              previousAlbum.classList.remove('playing');
+            }
+          }
+          
+          // Toggle current track
+          if (audio.paused) {
+            audio.play();
+            album.classList.add('playing');
+            currentlyPlaying = audio;
+          } else {
+            audio.pause();
+            audio.currentTime = 0;
+            album.classList.remove('playing');
+            currentlyPlaying = null;
+          }
+        });
+        
+        // Add hover effects
+        album.addEventListener('mouseenter', function() {
+          if (!this.classList.contains('playing')) {
+            this.style.transform = this.style.transform.replace('scale(1)', 'scale(1.05)');
+          }
+        });
+        
+        album.addEventListener('mouseleave', function() {
+          if (!this.classList.contains('playing')) {
+            this.style.transform = this.style.transform.replace('scale(1.05)', 'scale(1)');
+          }
+        });
+      });
+      
+      // Clean up when tracks end
+      document.querySelectorAll('audio[id^="track-"]').forEach(function(audio) {
+        audio.addEventListener('ended', function() {
+          var album = document.querySelector('.clickable-album[data-track="' + this.id + '"]');
+          if (album) {
+            album.classList.remove('playing');
+          }
+          if (currentlyPlaying === this) {
+            currentlyPlaying = null;
+          }
+        });
+      });
+    })();
   </script>
 </body>
 </html>
