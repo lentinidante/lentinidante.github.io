@@ -60,15 +60,7 @@ h1.name{
 }
 
 .interest-line{
-  margin:0 0 var(--gap-xs);
-  font-size:22px;
-  line-height:1.2;
-  color:var(--fg);
-  display: block;
-}
-
-.interest-line p {
-  margin: 0;
+  margin:0 0 4px;
 }
 
 /* Interest buttons use clean default styling with Arial font */
@@ -95,28 +87,6 @@ h1.name{
   border: 1.2px solid #000000;
 }
 
-/* Dark mode pending - show during delay with dark outline/grey like hover */
-.interest-trigger.dark-mode-pending {
-  background: #d8d8d8;
-  border: 1.2px solid #000000;
-}
-
-/* Beat flash during pending state - enhanced grey/selected effect */
-.interest-trigger.beat-flash-pending {
-  background: #c0c0c0 !important;
-  border: 1.2px solid #000000 !important;
-  box-shadow: 
-    0 0 8px rgba(0, 0, 0, 0.4),
-    inset 0 0 10px rgba(0, 0, 0, 0.1) !important;
-  transition: background 0.06s ease, box-shadow 0.06s ease;
-  /* Lock sizing */
-  transform: none !important;
-  margin: 0 !important;
-  margin-right: 1px !important;
-  padding: 1px 6px !important;
-  font-size: 15px !important;
-  line-height: inherit !important;
-}
 
 /* Dark mode button styling - subtle when not flashing */
 body.dark-mode .interest-trigger {
@@ -151,6 +121,26 @@ body.dark-mode .interest-trigger.beat-active {
   transition: all 0.1s ease;
 }
 
+
+/* Beat hover effect for dark mode - standard hover styling */
+.interest-trigger.beat-hover {
+  background: #d8d8d8 !important;
+  border: 1.2px solid #000000 !important;
+  transition: background 0.1s ease-out, border 0.1s ease-out;
+  /* LOCKED sizing - absolutely NO changes */
+  transform: none !important;
+  margin: 0 !important;
+  margin-right: 1px !important;
+  padding: 1px 6px !important;
+  font-size: 15px !important;
+  line-height: inherit !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: auto !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  will-change: background, border;
+}
 
 /* Beat flash effect - Smooth blue gradients with LOCKED sizing */
 .interest-trigger.beat-flash {
@@ -230,12 +220,20 @@ body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[dat
 }
 
 
-.desc p{ margin:0 0 var(--gap-xs); line-height:1.2; }
+.desc p{ margin:0 0 4px; }
 
 /* Spacing around "Prior;" */
 .desc .muted{
-  margin:0 0 var(--gap-xs);           /* consistent spacing */
   color:var(--muted);
+}
+
+/* Superscript styling to maintain line spacing */
+sup {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: super;
+  top: 0em;
 }
 
 /* Links */
@@ -281,14 +279,11 @@ body *{ position:relative; z-index:1; }
 /* Ensure links and interactive elements are clickable above everything */
 a, 
 a.company,
-a.social-link,
 .social-link, 
 #modeToggle, 
 button:not(.interest-trigger),
 nav,
-nav *,
-.social,
-.social * {
+.social {
   z-index: 100 !important;
   position: relative !important;
   pointer-events: auto !important; /* Always clickable */
@@ -604,3 +599,4 @@ body.dark-mode a:hover,
 body.dark-mode .social-link:hover {
   color: var(--link-hover);
 }
+
