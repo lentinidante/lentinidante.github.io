@@ -7,6 +7,8 @@
   <meta name="description" content="Dante Lentini — Growth & GTM engineering at Founders Inc (ex-Buildspace, Hyper).">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.gstatic.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; media-src 'self';">
+  <meta name="theme-color" content="#0064E6">
+  <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="assets/css/styles.css">
   <link rel="icon" href="/favicon.ico">
 
@@ -16,7 +18,7 @@
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     "inLanguage": "en",
-  "dateModified": "2025-08-28T00:00:00Z",
+    "dateModified": "2024-12-19T00:00:00Z",
     "mainEntity": {
       "@type": "Person",
       "@id": "https://dante.co/#dante",
@@ -43,21 +45,17 @@
   <div class="container">
     <h1 class="name">Dante Lentini</h1>
 
-    <div class="interest-line">
-      <p>I like to
-        <button class="interest-trigger" data-interest="read" type="button">read</button>,
-        <button class="interest-trigger" data-interest="write" type="button">write</button>,
-        and
-        <button class="interest-trigger" data-interest="listen" data-toggle="true" type="button">listen</button>.
-      </p>
-    </div>
-    
+    <p class="interest-line">I like to
+      <button class="interest-trigger" data-interest="read" type="button">read</button>,
+      <button class="interest-trigger" data-interest="write" type="button">write</button>,
+      and
+      <button class="interest-trigger" data-interest="listen" data-toggle="true" type="button">listen</button>.
+    </p>
 
     <div class="desc">
       <p>Growth + GTM <a href="https://f.inc" target="_blank" rel="noopener noreferrer" class="company"><strong>Founders Inc</strong></a></p>
       <p class="muted">Prior;</p>
-      <p>Growth <a href="https://buildspace.so" target="_blank" rel="noopener noreferrer" class="company"><strong>Buildspace</strong></a></p>
-      <p>Product <a href="https://www.ycombinator.com/companies/hyper" target="_blank" rel="noopener noreferrer" class="company"><strong>Hyper</strong></a> (acq.)</p>
+      <p>Growth <a href="https://buildspace.so" target="_blank" rel="noopener noreferrer" class="company"><strong>Buildspace</strong></a>, Product <a href="https://www.ycombinator.com/companies/hyper" target="_blank" rel="noopener noreferrer" class="company"><strong>Hyper</strong></a> <sup>(acq.)</sup></p>
     </div>
 
     <div id="sign">
@@ -115,8 +113,8 @@
     </div>
   </div>
 
+  <!-- Audio elements for dark mode and album tracks -->
   <audio id="nightSound" src="/assets/audio/dark-mode.mp3" preload="auto"></audio>
-  <!-- Album track audio elements -->
   <audio id="track-01" src="/assets/audio/track-01.mp3" preload="auto"></audio>
   <audio id="track-02" src="/assets/audio/track-02.mp3" preload="auto"></audio>
   <audio id="track-03" src="/assets/audio/track-03.mp3" preload="auto"></audio>
@@ -129,6 +127,11 @@
   <canvas id="starCanvas"></canvas>
 
   <script>
+    /**
+     * Interactive Portfolio Website
+     * Features: Beat detection, dark mode with starfield, floating interactive elements
+     */
+    
     // Interactive interests flyouts - PURE CSS HOVER, ONLY JS FOR PINNING
     (function() {
       var triggers = document.querySelectorAll('.interest-trigger');
@@ -207,7 +210,7 @@
       });
     }
 
-    // Dark mode toggle with audio and starfield
+    // Dark mode toggle with audio and starfield animation
     var toggleTimeout; // delay handle for theme switch
     var starTimeout; // delay handle for stars
     var isAutoSwitching = false;
@@ -275,24 +278,15 @@
         // Starting dark mode
         audio.play();
         
-        // Immediately apply dark outline/grey to buttons
-        document.querySelectorAll('.interest-trigger').forEach(function(btn) {
-          btn.classList.add('dark-mode-pending');
-        });
-        
-        toggleTimeout = setTimeout(function() {
-          document.body.classList.add('dark-mode');
-          // Remove pending state when dark mode activates
-          document.querySelectorAll('.interest-trigger').forEach(function(btn) {
-            btn.classList.remove('dark-mode-pending');
-          });
-          toggleTimeout = null;
-        }, 6300);
-        
         // Start beat detection immediately with dark mode audio
         if (window.startDarkModeBeats) {
           window.startDarkModeBeats(audio);
         }
+        
+        toggleTimeout = setTimeout(function() {
+          document.body.classList.add('dark-mode');
+          toggleTimeout = null;
+        }, 6300);
         
         // Start starfield animation
         starTimeout = setTimeout(function(){ 
@@ -306,10 +300,6 @@
           document.body.classList.remove('dark-mode');
         }
         
-        // Remove pending state if dark mode is cancelled
-        document.querySelectorAll('.interest-trigger').forEach(function(btn) {
-          btn.classList.remove('dark-mode-pending');
-        });
         
         clearTimeout(toggleTimeout);
         toggleTimeout = null;
@@ -332,7 +322,7 @@
       }
     });
 
-    // Album track audio functionality with beat detection
+    // Album track audio functionality (beat detection only works during dark mode)
     (function() {
       var albumCovers = document.querySelectorAll('.clickable-album');
       var currentlyPlaying = null;
@@ -380,12 +370,15 @@
       try {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         if (audioContext.state === 'suspended') {
-          // Resume on first user interaction
-          document.addEventListener('click', function() {
+          // Resume on any user interaction
+          var resumeAudioContext = function() {
             if (audioContext.state === 'suspended') {
               audioContext.resume();
             }
-          }, { once: true });
+          };
+          document.addEventListener('click', resumeAudioContext, { once: true });
+          document.addEventListener('touchstart', resumeAudioContext, { once: true });
+          document.addEventListener('keydown', resumeAudioContext, { once: true });
         }
       } catch (e) {
         console.error('Audio context failed:', e);
@@ -394,7 +387,6 @@
       // Beat detection functions
       function startBeatDetection(audioElement) {
         if (!audioContext || !audioElement) {
-          console.log('Cannot start beat detection: missing context or element');
           return;
         }
         
@@ -416,7 +408,6 @@
               source.connect(analyser);
               analyser.connect(audioContext.destination);
               audioSources[audioId] = source;
-              console.log('Beat detection connected for:', audioId);
             } catch (e) {
               console.error('Failed to create audio source:', e);
               return;
@@ -511,7 +502,6 @@
             }
           }, 16); // ~60fps
           
-          console.log('Beat detection started');
         } catch (e) {
           console.error('Beat detection setup failed:', e);
         }
@@ -521,7 +511,6 @@
         if (beatDetectionInterval) {
           clearInterval(beatDetectionInterval);
           beatDetectionInterval = null;
-          console.log('Beat detection stopped');
         }
       }
       
@@ -552,19 +541,19 @@
         if (now - lastFlashTime[interest] < cooldown) return;
         lastFlashTime[interest] = now;
         
-        // Use grey flash during pending state, color flash after dark mode activates
-        if (button.classList.contains('dark-mode-pending')) {
-          // Pre-cursor effect: grey/selected state flash
-          button.classList.add('beat-flash-pending');
-          setTimeout(function() {
-            button.classList.remove('beat-flash-pending');
-          }, 120);
-        } else {
-          // Full rainbow gradient effect
+        // Use different effects based on dark mode state
+        if (document.body.classList.contains('dark-mode')) {
+          // In dark mode: use blue color flash effect
           button.classList.add('beat-flash');
           button.style.setProperty('--flash-color', color);
           setTimeout(function() {
             button.classList.remove('beat-flash');
+          }, 140);
+        } else {
+          // During delay: use standard hover effect for beat response
+          button.classList.add('beat-hover');
+          setTimeout(function() {
+            button.classList.remove('beat-hover');
           }, 140);
         }
       }
@@ -604,8 +593,7 @@
               playPromise.then(function() {
                 album.classList.add('playing');
                 currentlyPlaying = audio;
-                // Start beat detection when audio plays
-                startBeatDetection(audio);
+                // Don't start beat detection for regular album playback
               }).catch(function() {
                 // Silently handle autoplay blocking - try again on next interaction
                 audio.currentTime = 0;
@@ -613,15 +601,12 @@
             } else {
               album.classList.add('playing');
               currentlyPlaying = audio;
-              startBeatDetection(audio);
             }
           } else {
             audio.pause();
             audio.currentTime = 0;
             album.classList.remove('playing');
             currentlyPlaying = null;
-            // Stop beat detection when audio stops
-            stopBeatDetection();
           }
         });
         
@@ -649,23 +634,19 @@
           if (currentlyPlaying === this) {
             currentlyPlaying = null;
           }
-          // Stop beat detection when track ends
-          stopBeatDetection();
         });
       });
       
-      // Expose function to start beat detection for dark mode audio
+      // Expose function to start beat detection ONLY for dark mode audio
       window.startDarkModeBeats = function(audioElement) {
         if (audioElement && !audioElement.paused) {
           startBeatDetection(audioElement);
-          console.log('Beat detection started for dark mode audio');
         }
       };
       
       // Expose function to stop beat detection
       window.stopDarkModeBeats = function() {
         stopBeatDetection();
-        console.log('Beat detection stopped');
       };
       
       // Also stop beat detection when dark mode audio ends
@@ -679,4 +660,3 @@
   </script>
 </body>
 </html>
-
