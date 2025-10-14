@@ -6,6 +6,7 @@
   <link rel="canonical" href="https://dante.co/">
   <meta name="description" content="Dante Lentini — Growth & GTM engineering at Founders Inc (ex-Buildspace, Hyper).">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.gstatic.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; media-src 'self';">
   <link rel="stylesheet" href="assets/css/styles.css">
   <link rel="icon" href="/favicon.ico">
 
@@ -42,13 +43,14 @@
   <div class="container">
     <h1 class="name">Dante Lentini</h1>
 
-    <p class="interest-line">
-      I like to
-      <button class="interest-trigger" data-interest="read" type="button">read</button>,
-      <button class="interest-trigger" data-interest="write" type="button">write</button>,
-      and
-      <button class="interest-trigger" data-interest="listen" data-toggle="true" type="button">listen</button>.
-    </p>
+    <div class="interest-line">
+      <p>I like to
+        <button class="interest-trigger" data-interest="read" type="button">read</button>,
+        <button class="interest-trigger" data-interest="write" type="button">write</button>,
+        and
+        <button class="interest-trigger" data-interest="listen" data-toggle="true" type="button">listen</button>.
+      </p>
+    </div>
     
 
     <div class="desc">
@@ -128,73 +130,61 @@
   <canvas id="starCanvas"></canvas>
 
   <script>
-    // Interactive interests flyouts
+    // Interactive interests flyouts - PURE CSS HOVER, ONLY JS FOR PINNING
     (function() {
       var triggers = document.querySelectorAll('.interest-trigger');
       if (!triggers.length) { return; }
-
-      var clusters = {};
-      document.querySelectorAll('.floating-cluster').forEach(function(cluster) {
-        var interest = cluster.getAttribute('data-interest');
-        if (interest) { clusters[interest] = cluster; }
-      });
-
-      var activeInterest = null;
-      var pinnedInterest = null;
-      var hideTimeout;
-
-      function applyInterest(interest) {
-        Object.keys(clusters).forEach(function(key) {
-          clusters[key].classList.toggle('active', key === interest);
-        });
-        activeInterest = interest;
-      }
-
-      function showInterest(interest) {
-        if (!clusters[interest]) { return; }
-        clearTimeout(hideTimeout);
-        applyInterest(interest);
-      }
-
-      function revertToPinned(delay) {
-        clearTimeout(hideTimeout);
-        hideTimeout = setTimeout(function() {
-          if (pinnedInterest && clusters[pinnedInterest]) {
-            applyInterest(pinnedInterest);
-          } else {
-            applyInterest(null);
-          }
-        }, delay || 0);
-      }
-
-      function togglePinned(interest) {
-        if (!clusters[interest]) { return; }
-        clearTimeout(hideTimeout);
-        if (pinnedInterest === interest) {
-          pinnedInterest = null;
-          applyInterest(null);
-        } else {
-          pinnedInterest = interest;
-          applyInterest(interest);
-        }
-      }
 
       triggers.forEach(function(trigger) {
         var interest = trigger.getAttribute('data-interest');
         if (!interest) { return; }
 
-        trigger.addEventListener('click', function() { togglePinned(interest); });
-        trigger.addEventListener('mouseenter', function() { showInterest(interest); });
-        trigger.addEventListener('mouseleave', function() { revertToPinned(180); });
-        trigger.addEventListener('focus', function() { showInterest(interest); });
-        trigger.addEventListener('blur', function() { revertToPinned(180); });
+        // Click toggles pinned state only
+        trigger.addEventListener('click', function(e) {
+          // Ignore clicks during dark mode beat switching
+          if (isAutoSwitching) return;
+          
+          e.stopPropagation();
+          
+          var isPinned = trigger.classList.contains('pinned');
+          
+          if (isPinned) {
+            // Unpin this button
+            trigger.classList.remove('pinned');
+          } else {
+            // Unpin all other buttons and pin this one
+            document.querySelectorAll('.interest-trigger').forEach(function(btn){ 
+              btn.classList.remove('pinned');
+            });
+            trigger.classList.add('pinned');
+          }
+        });
       });
 
+      // Escape key unpins all buttons
       document.addEventListener('keydown', function(event) {
+        // Ignore escape during dark mode beat switching
+        if (isAutoSwitching) return;
+        
         if (event.key === 'Escape') {
-          clearTimeout(hideTimeout);
-          pinnedInterest = null;
-          applyInterest(null);
+          document.querySelectorAll('.interest-trigger').forEach(function(btn){ 
+            btn.classList.remove('pinned'); 
+          });
+        }
+      });
+
+      // Click outside buttons to unpin
+      document.addEventListener('click', function(event) {
+        // Ignore click-outside during dark mode beat switching
+        if (isAutoSwitching) return;
+        
+        // Check if click is NOT on an interest button
+        var clickedButton = event.target.closest('.interest-trigger');
+        if (!clickedButton) {
+          // Clicked outside - unpin all buttons (but don't prevent default - let other clicks work)
+          document.querySelectorAll('.interest-trigger').forEach(function(btn){ 
+            btn.classList.remove('pinned'); 
+          });
         }
       });
     })();
@@ -207,17 +197,13 @@
     });
 
     function applyInterestGlobal(interest) {
-      Object.keys(globalClusters).forEach(function(key) {
-        globalClusters[key].classList.toggle('active', key === interest);
-      });
-      
-      // Also update button visual states
+      // Update button visual states by adding/removing pinned and beat-active classes
       document.querySelectorAll('.interest-trigger').forEach(function(button) {
         var buttonInterest = button.getAttribute('data-interest');
         if (buttonInterest === interest) {
-          button.classList.add('beat-active');
+          button.classList.add('pinned', 'beat-active');
         } else {
-          button.classList.remove('beat-active');
+          button.classList.remove('pinned', 'beat-active');
         }
       });
     }
@@ -418,13 +404,13 @@
         // Add hover effects
         album.addEventListener('mouseenter', function() {
           if (!this.classList.contains('playing')) {
-            this.style.transform = this.style.transform.replace('scale(1)', 'scale(1.05)');
+            this.classList.add('album-hover');
           }
         });
         
         album.addEventListener('mouseleave', function() {
           if (!this.classList.contains('playing')) {
-            this.style.transform = this.style.transform.replace('scale(1.05)', 'scale(1)');
+            this.classList.remove('album-hover');
           }
         });
       });
