@@ -30,7 +30,9 @@ html{box-sizing:border-box}
 
 /* ===== Base ===== */
 body{
-  margin:40px; padding:env(safe-area-inset);
+  margin:0; 
+  padding:40px;
+  padding:env(safe-area-inset);
   background:var(--bg); color:var(--fg);
   font-family:"Family",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   font-size:22px; line-height:1.1;
@@ -44,7 +46,8 @@ body{
 .container{
   max-width:520px; 
   width:100%; 
-  margin:0 auto;
+  margin:auto;
+  padding: 0 20px;
   position: relative;
   z-index: 5;
 }
@@ -583,6 +586,36 @@ body.dark-mode .floating-cluster[data-interest="listen"] .floating-item.clickabl
   box-shadow: 0 0 15px rgba(0, 122, 204, 0.6), 0 18px 35px rgba(10, 30, 60, 0.4);
 }
 
+
+/* ===== Corner layout for interests (top/bottom only, groups of 2) ===== */
+/* Force all interest clusters to sit near the top and bottom edges with two items per corner */
+/* Top left pair - naturally spread */
+.floating-cluster .floating-item:nth-child(1) { --x: 32% !important; --y: 20% !important; }
+.floating-cluster .floating-item:nth-child(2) { --x: 40% !important; --y: 25% !important; }
+/* Top right pair - naturally spread */
+.floating-cluster .floating-item:nth-child(3) { --x: 68% !important; --y: 20% !important; }
+.floating-cluster .floating-item:nth-child(4) { --x: 60% !important; --y: 25% !important; }
+/* Bottom left pair - naturally spread */
+.floating-cluster .floating-item:nth-child(5) { --x: 32% !important; --y: 80% !important; }
+.floating-cluster .floating-item:nth-child(6) { --x: 40% !important; --y: 75% !important; }
+/* Bottom right pair - naturally spread */
+.floating-cluster .floating-item:nth-child(7) { --x: 68% !important; --y: 80% !important; }
+.floating-cluster .floating-item:nth-child(8) { --x: 60% !important; --y: 75% !important; }
+
+/* Ensure dark mode respects corner layout and does not drift */
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item { animation: none !important; }
+/* Top left pair - naturally spread */
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(1) { top: 20% !important; left: 32% !important; }
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(2) { top: 25% !important; left: 40% !important; }
+/* Top right pair - naturally spread */
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(3) { top: 20% !important; left: 68% !important; }
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(4) { top: 25% !important; left: 60% !important; }
+/* Bottom left pair - naturally spread */
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(5) { top: 80% !important; left: 32% !important; }
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(6) { top: 75% !important; left: 40% !important; }
+/* Bottom right pair - naturally spread */
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(7) { top: 80% !important; left: 68% !important; }
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(8) { top: 75% !important; left: 60% !important; }
 
 @media (max-width:640px){
   .floating-item{
