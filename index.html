@@ -193,13 +193,16 @@
 
         // Check if click/touch is NOT on an interest button
         var clickedButton = event.target.closest('.interest-trigger');
-        if (!clickedButton) {
-          // Clicked/touched outside - unpin all buttons
-          document.querySelectorAll('.interest-trigger').forEach(function(btn){
-            btn.classList.remove('pinned');
-          });
-          setActiveInterestAttribute(null);
+        var clickedInteractiveArea = event.target.closest('.floating-item');
+        if (clickedButton || clickedInteractiveArea) {
+          return;
         }
+
+        // Clicked/touched outside - unpin all buttons
+        document.querySelectorAll('.interest-trigger').forEach(function(btn){
+          btn.classList.remove('pinned');
+        });
+        setActiveInterestAttribute(null);
       }
       
       document.addEventListener('click', handleOutsideInteraction);
