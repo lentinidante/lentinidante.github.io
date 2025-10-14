@@ -232,9 +232,23 @@ body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[dat
   pointer-events: auto; /* INTERACTIVE when pinned */
 }
 
+body[data-active-interest="read"] .floating-cluster[data-interest="read"],
+body[data-active-interest="write"] .floating-cluster[data-interest="write"],
+body[data-active-interest="listen"] .floating-cluster[data-interest="listen"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 body:has(.interest-trigger[data-interest="read"].pinned) .floating-cluster[data-interest="read"] .floating-item,
 body:has(.interest-trigger[data-interest="write"].pinned) .floating-cluster[data-interest="write"] .floating-item,
 body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[data-interest="listen"] .floating-item {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
+}
+
+body[data-active-interest="read"] .floating-cluster[data-interest="read"] .floating-item,
+body[data-active-interest="write"] .floating-cluster[data-interest="write"] .floating-item,
+body[data-active-interest="listen"] .floating-cluster[data-interest="listen"] .floating-item {
   opacity: 1;
   transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
 }
@@ -431,6 +445,10 @@ nav,
 /* Albums only clickable when their cluster is shown and interactive (pinned) */
 body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[data-interest="listen"] .floating-item.clickable-album {
   pointer-events: auto; /* Now clickable when pinned */
+}
+
+body[data-active-interest="listen"] .floating-cluster[data-interest="listen"] .floating-item.clickable-album {
+  pointer-events: auto;
 }
 
 /* Dark mode: show listen cluster with organic floating animation */

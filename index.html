@@ -132,6 +132,14 @@
      * Features: Beat detection, dark mode with starfield, floating interactive elements
      */
     
+    function setActiveInterestAttribute(interest) {
+      if (interest) {
+        document.body.setAttribute('data-active-interest', interest);
+      } else {
+        document.body.removeAttribute('data-active-interest');
+      }
+    }
+
     // Interactive interests flyouts - PURE CSS HOVER, ONLY JS FOR PINNING
     (function() {
       var triggers = document.querySelectorAll('.interest-trigger');
@@ -153,12 +161,14 @@
           if (isPinned) {
             // Unpin this button
             trigger.classList.remove('pinned');
+            setActiveInterestAttribute(null);
           } else {
             // Unpin all other buttons and pin this one
-            document.querySelectorAll('.interest-trigger').forEach(function(btn){ 
+            document.querySelectorAll('.interest-trigger').forEach(function(btn){
               btn.classList.remove('pinned');
             });
             trigger.classList.add('pinned');
+            setActiveInterestAttribute(interest);
           }
         });
       });
@@ -167,11 +177,12 @@
       document.addEventListener('keydown', function(event) {
         // Ignore escape during dark mode beat switching
         if (isAutoSwitching) return;
-        
+
         if (event.key === 'Escape') {
-          document.querySelectorAll('.interest-trigger').forEach(function(btn){ 
-            btn.classList.remove('pinned'); 
+          document.querySelectorAll('.interest-trigger').forEach(function(btn){
+            btn.classList.remove('pinned');
           });
+          setActiveInterestAttribute(null);
         }
       });
 
@@ -179,14 +190,20 @@
       function handleOutsideInteraction(event) {
         // Ignore during dark mode beat switching
         if (isAutoSwitching) return;
-        
+
         // Check if click/touch is NOT on an interest button
         var clickedButton = event.target.closest('.interest-trigger');
         if (!clickedButton) {
+          // Allow interactions inside floating clusters without unpinning
+          if (event.target.closest('.floating-layer')) {
+            return;
+          }
+
           // Clicked/touched outside - unpin all buttons
-          document.querySelectorAll('.interest-trigger').forEach(function(btn){ 
-            btn.classList.remove('pinned'); 
+          document.querySelectorAll('.interest-trigger').forEach(function(btn){
+            btn.classList.remove('pinned');
           });
+          setActiveInterestAttribute(null);
         }
       }
       
@@ -211,6 +228,8 @@
           button.classList.remove('pinned', 'beat-active');
         }
       });
+
+      setActiveInterestAttribute(interest);
     }
 
     // Dark mode toggle with audio and starfield animation
