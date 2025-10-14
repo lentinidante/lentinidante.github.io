@@ -1,707 +1,95 @@
-/* ===== Font faces ===== */
-@font-face{
-  font-family:"Family"; font-style:normal; font-weight:400; font-display:swap;
-  src:url("../fonts/family-regular.woff2") format("woff2");
-}
-@font-face{
-  font-family:"Family"; font-style:normal; font-weight:700; font-display:swap;
-  src:url("../fonts/family-bold.woff2") format("woff2");
-}
-/* Signature font: Caveat */
-@font-face{
-  font-family:"Caveat"; font-style:normal; font-weight:400; font-display:swap;
-  src:url(https://fonts.gstatic.com/s/caveat/v18/WnznHAc5bAfYB2QRah7pcpNvOx-pjfJ9eIWpYT5Kmgq3sw.woff2) format("woff2");
+/* Fonts */
+@font-face {
+    font-family: 'Family';
+    src: url('../fonts/family-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
 }
 
-/* ===== Theme tokens ===== */
-:root{
-  --bg: rgb(0,100,230);
-  --fg: rgb(194, 246, 255);       /* body text color */
-  --fg-strong: #fff;
-  --link: rgb(194, 246, 255);     /* link color */
-  --link-hover: #fff;             /* link hover color */
-  --muted: rgb(194, 246, 255);    /* muted text color */
-  --gap-xs: 8px; --gap-sm: 12px; --gap: 16px; --gap-lg: 32px;
+@font-face {
+    font-family: 'Family';
+    src: url('../fonts/family-bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
 }
 
-html,body{height:100%}
-html{box-sizing:border-box}
-*,*::before,*::after{box-sizing:inherit}
-
-/* ===== Base ===== */
-body{
-  margin:0; 
-  padding:40px;
-  padding:env(safe-area-inset);
-  background:var(--bg); color:var(--fg);
-  font-family:"Family",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  font-size:22px; line-height:1.1;
-  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-
-  display:flex; align-items:center; justify-content:center; min-height:100dvh;
-  overflow-x:auto; /* allow horizontal scroll on narrow screens */
+@font-face {
+    font-family: 'Caveat';
+    src: url(https://fonts.gstatic.com/s/caveat/v18/WnznHAc5bAfYB2QRah7pcpNvOx-pjfJ9eIWpYT5Kmgq3sw.woff2) format('woff2');
+    font-weight: 400;
+    font-display: swap;
 }
 
-/* Center column */
-.container{
-  max-width:520px; 
-  width:100%; 
-  margin:auto;
-  padding: 0 20px;
-  position: relative;
-  z-index: 5;
+/* Theme */
+:root {
+    --bg: rgb(0, 100, 230);
+    --fg: rgb(194, 246, 255);
+    --fg-strong: #fff;
 }
 
-/* ===== Typography & spacing ===== */
-.name {
-  color: #fff;
-  margin-bottom: 0;
+/* Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.interest-line{
-  margin:16px 0 8px;
+body {
+    padding: 40px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Family", system-ui, -apple-system, sans-serif;
+    font-size: 20px;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Even line spacing for paragraphs */
+/* Typography */
+h1 {
+    font-size: 2.2em;
+    color: var(--fg-strong);
+}
+
 p {
-  margin: 8px 0;
+    margin-bottom: 1em;
+    line-height: 1.4;
 }
 
-/* Tighter spacing for main body paragraphs only */
-.container > p {
-  margin: 2px 0;
+.white {
+    color: var(--fg-strong);
 }
 
-/* Signature block spacing */
-#sign{ 
-  margin: 8px 0; 
+/* Signature */
+.signature {
+    margin: 1em 0 0.5em;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2em;
+    line-height: 1.3;
+    color: var(--fg-strong);
 }
 
-#sign p{ 
-  margin: 8px 0; 
+/* Social Links */
+.social-links {
+    display: flex;
+    gap: 12px;
 }
 
-/* Interest buttons use clean default styling with Arial font */
-.interest-trigger {
-  font-family: Arial, system-ui, -apple-system, sans-serif;
-  font-size: 15px;
-  font-weight: normal;
-  line-height: inherit;
-  color: #000;
-  background: #e8e8e8;
-  border: 1.2px solid #999;
-  border-radius: 2px;
-  padding: 1px 6px;
-  margin: 0;
-  margin-right: 1px;
-  cursor: pointer;
-  text-align: center;
-  display: inline-block;
-  width: 50px; /* Fixed width for consistent button sizes */
-  box-sizing: border-box;
-  z-index: 3; /* ensure buttons sit above floating overlay */
+.social-links a {
+    font-size: 18px;
+    color: var(--fg);
+    text-decoration: underline;
 }
 
-.interest-trigger:hover {
-  background: #d8d8d8;
-  border: 1.2px solid #000000;
+.social-links a:hover {
+    color: var(--fg-strong);
 }
 
-
-/* Dark mode button styling - subtle when not flashing */
-body.dark-mode .interest-trigger {
-  color: #f0f0f0;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1.2px solid rgba(255, 255, 255, 0.3);
-}
-
-body.dark-mode .interest-trigger:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1.2px solid rgba(255, 255, 255, 0.4);
-}
-
-
-.interest-trigger:active {
-  background: #ddd;
-  border-color: #777;
-}
-
-.interest-trigger:focus {
-  outline: 1px dotted #666;
-  outline-offset: 1px;
-}
-
-.interest-trigger.beat-active,
-body.dark-mode .interest-trigger.beat-active {
-  background: #007acc !important;
-  color: #fff !important;
-  border: 1.2px solid #005a9e !important;
-  box-shadow: 0 0 8px rgba(0, 122, 204, 0.6) !important;
-  /* Removed transform: scale(1.05) to prevent size changes */
-  transition: background 0.1s ease, color 0.1s ease, border 0.1s ease, box-shadow 0.1s ease;
-}
-
-
-/* Beat hover effect for dark mode - standard hover styling */
-.interest-trigger.beat-hover {
-  background: #d8d8d8 !important;
-  border: 1.2px solid #000000 !important;
-  transition: background 0.1s ease-out, border 0.1s ease-out;
-  /* LOCKED sizing - absolutely NO changes */
-  transform: none !important;
-  margin: 0 !important;
-  margin-right: 1px !important;
-  padding: 1px 6px !important;
-  font-size: 15px !important;
-  line-height: inherit !important;
-  width: 50px !important; /* Maintain fixed width */
-  height: auto !important;
-  min-width: 50px !important;
-  max-width: 50px !important;
-  box-sizing: border-box !important;
-  will-change: background, border;
-}
-
-/* Beat flash effect - Smooth blue gradients with LOCKED sizing */
-.interest-trigger.beat-flash {
-  background: var(--flash-color) !important;
-  color: #fff !important;
-  border: 1.2px solid rgba(147, 197, 253, 0.4) !important;
-  box-shadow: 
-    0 0 15px rgba(59, 130, 246, 0.4),
-    0 0 30px rgba(59, 130, 246, 0.25),
-    inset 0 0 12px rgba(255, 255, 255, 0.2) !important;
-  transition: background 0.1s ease-out, box-shadow 0.1s ease-out, color 0.1s ease-out, border 0.1s ease-out;
-  /* LOCKED sizing - absolutely NO changes */
-  transform: none !important;
-  margin: 0 !important;
-  margin-right: 1px !important;
-  padding: 1px 6px !important;
-  font-size: 15px !important;
-  line-height: inherit !important;
-  width: 50px !important; /* Maintain fixed width */
-  height: auto !important;
-  min-width: 50px !important;
-  max-width: 50px !important;
-  box-sizing: border-box !important;
-  will-change: background, box-shadow;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-}
-
-body.dark-mode .interest-trigger.beat-flash {
-  background: var(--flash-color) !important;
-  border: 1.2px solid rgba(147, 197, 253, 0.5) !important;
-  box-shadow: 
-    0 0 20px rgba(59, 130, 246, 0.5),
-    0 0 40px rgba(59, 130, 246, 0.3),
-    0 0 60px rgba(59, 130, 246, 0.2),
-    inset 0 0 15px rgba(255, 255, 255, 0.3) !important;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-}
-
-/* Body pulse effect - removed to prevent background glitching */
-
-/* Pinned visual state for interest buttons - same as hover */
-.interest-trigger.pinned{
-  background: #d8d8d8;
-  border: 1.2px solid #000000;
-}
-
-/* Pure CSS hover - VISUAL ONLY on hover, INTERACTIVE when pinned */
-
-/* Show clusters visually on hover (no interaction) */
-body:has(.interest-trigger[data-interest="read"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="read"],
-body:has(.interest-trigger[data-interest="write"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="write"],
-body:has(.interest-trigger[data-interest="listen"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="listen"] {
-  opacity: 1;
-  pointer-events: none; /* VISUAL ONLY - not clickable on hover */
-}
-
-body:has(.interest-trigger[data-interest="read"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="read"] .floating-item,
-body:has(.interest-trigger[data-interest="write"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="write"] .floating-item,
-body:has(.interest-trigger[data-interest="listen"]:hover):not(:has(.interest-trigger.pinned)) .floating-cluster[data-interest="listen"] .floating-item {
-  opacity: 1;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
-}
-
-/* Show clusters interactively when button is pinned */
-body:has(.interest-trigger[data-interest="read"].pinned) .floating-cluster[data-interest="read"],
-body:has(.interest-trigger[data-interest="write"].pinned) .floating-cluster[data-interest="write"],
-body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[data-interest="listen"] {
-  opacity: 1;
-  pointer-events: auto; /* INTERACTIVE when pinned */
-}
-
-body[data-active-interest="read"] .floating-cluster[data-interest="read"],
-body[data-active-interest="write"] .floating-cluster[data-interest="write"],
-body[data-active-interest="listen"] .floating-cluster[data-interest="listen"] {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-body:has(.interest-trigger[data-interest="read"].pinned) .floating-cluster[data-interest="read"] .floating-item,
-body:has(.interest-trigger[data-interest="write"].pinned) .floating-cluster[data-interest="write"] .floating-item,
-body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[data-interest="listen"] .floating-item {
-  opacity: 1;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
-}
-
-body[data-active-interest="read"] .floating-cluster[data-interest="read"] .floating-item,
-body[data-active-interest="write"] .floating-cluster[data-interest="write"] .floating-item,
-body[data-active-interest="listen"] .floating-cluster[data-interest="listen"] .floating-item {
-  opacity: 1;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
-}
-
-
-.desc p{ margin:0 0 4px; }
-
-
-/* Superscript styling to maintain line spacing */
-sup {
-  font-size: 0.75em;
-  line-height: 0;
-  position: relative;
-  vertical-align: super;
-  top: 0em;
-}
-
-/* Links */
-a{
-  color:var(--link);
-  text-decoration: underline;
-  text-underline-offset:2px;
-}
-a:hover{ color:var(--link-hover); }
-a:focus-visible{ outline:2px dotted currentColor; outline-offset:2px; }
-
-/* Company links */
-a.company{ color:var(--fg-strong); text-decoration:none; }
-a.company:hover{ text-decoration: underline; }
-
-/* Plain white links (no underline, no hover change) */
-a.link-plain-white{ color:var(--fg-strong); text-decoration:none; }
-a.link-plain-white:hover{ color:var(--fg-strong); text-decoration:underline; text-underline-offset:2px; }
-
-/* Signature block */
-/* Spacing under "Best," */
-#sign{ margin-top:var(--gap); margin-bottom:var(--gap); }
-#sign p{ margin:0 0 2px; }
-#signature{
-  margin-top:0;
-  font-family:"Caveat",cursive;
-  font-size:30px;
-  color:var(--fg-strong);
-  line-height:1;
-}
-#signature a,#signature a:visited{ color:inherit; text-decoration:none; }
-
-/* Add spacing between signature and current work */
-#sign p:nth-last-child(2) {
-  margin-top: 8px;
-  margin-bottom: 0;
-}
-
-/* Past work styling - faded appearance */
-.past-work {
-  opacity: 0.6;
-  color: rgba(194, 246, 255, 0.7);
-  margin-top: 2px;
-  margin-bottom: 4px;
-}
-
-.past-work a.company {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.past-work a.company:hover {
-  color: rgba(255, 255, 255, 1);
-  opacity: 1;
-}
-
-/* Dark mode past work styling */
-body.dark-mode .past-work {
-  color: rgba(240, 240, 240, 0.6);
-}
-
-body.dark-mode .past-work a.company {
-  color: rgba(240, 240, 240, 0.7);
-}
-
-body.dark-mode .past-work a.company:hover {
-  color: rgba(240, 240, 240, 1);
-  opacity: 1;
-}
-
-/* Social row */
-.social ul{
-  display:flex; gap:16px; list-style:none; padding:0; margin:var(--gap-xs) 0 0;
-}
-.social-link{ font-size:18px; color:var(--link); }
-.social-link:hover{ color:var(--link-hover); text-decoration:overline; }
-
-/* ===== Star canvas ===== */
-#starCanvas{
-  position:fixed; inset:0; width:100%; height:100%;
-  z-index:0; pointer-events:none; /* pass-through clicks */
-}
-body *{ position:relative; z-index:1; }
-
-/* Ensure links and interactive elements are clickable above everything */
-a, 
-a.company,
-.social-link, 
-#modeToggle, 
-button:not(.interest-trigger),
-nav,
-.social {
-  z-index: 100 !important;
-  position: relative !important;
-  pointer-events: auto !important; /* Always clickable */
-}
-
-.floating-layer,
-.floating-layer *{
-  position:absolute;
-  z-index:2;
-}
-
-.floating-layer{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-}
-
-.floating-cluster{
-  inset:0;
-  opacity:0;
-  transition:opacity 0.25s ease;
-  pointer-events:none;
-}
-
-.floating-cluster.active{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.floating-item{
-  top:var(--y, 50%);
-  left:var(--x, 50%);
-  width:var(--width, 120px);
-  height:var(--height, 160px);
-  transform:translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(0.92);
-  transform-origin:center;
-  border-radius:12px;
-  background-color:rgba(255,255,255,0.35);
-  background-image:var(--image);
-  background-size:cover;
-  background-position:center;
-  box-shadow:0 14px 30px rgba(10, 30, 60, 0.25);
-  opacity:0;
-  transition:opacity 0.35s ease, transform 0.35s ease;
+/* Buttons - Reset to default browser styling */
+button {
+    all: revert;
 }
-
-
-.floating-cluster.active .floating-item{
-  opacity:1;
-  transform:translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
-}
-
-.floating-item.book{
-  --width:120px;
-  --height:168px;
-  border-radius:10px;
-}
-
-.floating-item.paper{
-  --width:132px;
-  --height:172px;
-  border-radius:6px;
-  background-image:
-    linear-gradient(135deg, rgba(255,255,255,0.9), rgba(230,240,255,0.65));
-  box-shadow:0 12px 28px rgba(12, 32, 66, 0.2);
-}
-
-.floating-item.paper::after{
-  content:"";
-  position:absolute;
-  inset:14px;
-  border-radius:4px;
-  border:1px dashed rgba(0, 32, 86, 0.3);
-}
-
-.floating-item.album{
-  --width:150px;
-  --height:150px;
-  border-radius:18px;
-}
-
-.floating-item.clickable-album{
-  cursor: pointer;
-  pointer-events: none; /* Not clickable by default (when invisible) */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Albums only clickable when their cluster is shown and interactive (pinned) */
-body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[data-interest="listen"] .floating-item.clickable-album {
-  pointer-events: auto; /* Now clickable when pinned */
-}
-
-body[data-active-interest="listen"] .floating-cluster[data-interest="listen"] .floating-item.clickable-album {
-  pointer-events: auto;
-}
-
-/* Dark mode: show listen cluster with organic floating animation */
-body.dark-mode .floating-cluster[data-interest="listen"] {
-  opacity: 1;
-  pointer-events: auto; /* Albums are clickable in dark mode */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item {
-  opacity: 1;
-  position: absolute;
-}
-
-/* Radial positioning for albums in dark mode - evenly spaced around screen */
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(1) {
-  top: 20%;
-  left: 20%;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
-  animation: float-1 28s ease-in-out infinite;
-}
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(2) {
-  top: 20%;
-  left: 80%;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
-  animation: float-2 35s ease-in-out infinite;
-}
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(3) {
-  top: 80%;
-  left: 80%;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
-  animation: float-3 31s ease-in-out infinite;
-}
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(4) {
-  top: 80%;
-  left: 20%;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
-  animation: float-4 26s ease-in-out infinite;
-}
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(5) {
-  top: 50%;
-  left: 8%;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
-  animation: float-5 33s ease-in-out infinite;
-}
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(6) {
-  top: 50%;
-  left: 92%;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
-  animation: float-6 29s ease-in-out infinite;
-}
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(7) {
-  top: 8%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
-  animation: float-7 34s ease-in-out infinite;
-}
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(8) {
-  top: 92%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
-  animation: float-8 30s ease-in-out infinite;
-}
-
-/* Individual floating animations for organic movement */
-@keyframes float-1 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
-  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-20px) translateX(15px); }
-  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-10px) translateX(30px); }
-  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(15px) translateX(10px); }
-}
-
-@keyframes float-2 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
-  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(18px) translateX(-20px); }
-  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(8px) translateX(-35px); }
-  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-12px) translateX(-15px); }
-}
-
-@keyframes float-3 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
-  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-25px) translateX(-18px); }
-  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-15px) translateX(-28px); }
-  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(10px) translateX(-8px); }
-}
-
-@keyframes float-4 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
-  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(22px) translateX(-25px); }
-  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(12px) translateX(-40px); }
-  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-18px) translateX(-20px); }
-}
-
-@keyframes float-5 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
-  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-15px) translateX(-22px); }
-  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-8px) translateX(-32px); }
-  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(20px) translateX(-12px); }
-}
-
-@keyframes float-6 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
-  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-20px) translateX(18px); }
-  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-12px) translateX(25px); }
-  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(16px) translateX(8px); }
-}
-
-@keyframes float-7 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
-  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-18px) translateX(24px); }
-  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-10px) translateX(38px); }
-  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(14px) translateX(16px); }
-}
-
-@keyframes float-8 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
-  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(20px) translateX(20px); }
-  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(10px) translateX(35px); }
-  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-15px) translateX(15px); }
-}
-
-/* Hide other interest clusters in dark mode */
-body.dark-mode .floating-cluster[data-interest="read"],
-body.dark-mode .floating-cluster[data-interest="write"] {
-  display: none;
-}
-
-/* Keep albums hoverable and clickable in dark mode */
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item.clickable-album {
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item.clickable-album:hover {
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1.1);
-  box-shadow: 0 0 30px rgba(0, 122, 204, 0.8);
-}
-
-
-.floating-item.clickable-album:hover{
-  box-shadow: 0 18px 35px rgba(10, 30, 60, 0.35);
-}
-
-.floating-item.clickable-album.album-hover{
-  box-shadow: 0 18px 35px rgba(10, 30, 60, 0.45);
-}
-
-.floating-item.clickable-album.playing{
-  box-shadow: 0 0 15px rgba(0, 122, 204, 0.6), 0 18px 35px rgba(10, 30, 60, 0.4);
-}
-
-
-/* ===== Corner layout for interests (top/bottom only, groups of 2) ===== */
-/* Force all interest clusters to sit near the top and bottom edges with two items per corner */
-/* Top left pair - naturally spread */
-.floating-cluster .floating-item:nth-child(1) { --x: 32% !important; --y: 20% !important; }
-.floating-cluster .floating-item:nth-child(2) { --x: 40% !important; --y: 25% !important; }
-/* Top right pair - naturally spread */
-.floating-cluster .floating-item:nth-child(3) { --x: 68% !important; --y: 20% !important; }
-.floating-cluster .floating-item:nth-child(4) { --x: 60% !important; --y: 25% !important; }
-/* Bottom left pair - naturally spread */
-.floating-cluster .floating-item:nth-child(5) { --x: 32% !important; --y: 80% !important; }
-.floating-cluster .floating-item:nth-child(6) { --x: 40% !important; --y: 75% !important; }
-/* Bottom right pair - naturally spread */
-.floating-cluster .floating-item:nth-child(7) { --x: 68% !important; --y: 80% !important; }
-.floating-cluster .floating-item:nth-child(8) { --x: 60% !important; --y: 75% !important; }
-
-/* Ensure dark mode respects corner layout and does not drift */
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item { animation: none !important; }
-/* Top left pair - naturally spread */
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(1) { top: 20% !important; left: 32% !important; }
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(2) { top: 25% !important; left: 40% !important; }
-/* Top right pair - naturally spread */
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(3) { top: 20% !important; left: 68% !important; }
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(4) { top: 25% !important; left: 60% !important; }
-/* Bottom left pair - naturally spread */
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(5) { top: 80% !important; left: 32% !important; }
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(6) { top: 75% !important; left: 40% !important; }
-/* Bottom right pair - naturally spread */
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(7) { top: 80% !important; left: 68% !important; }
-body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(8) { top: 75% !important; left: 60% !important; }
-
-@media (max-width:640px){
-  .floating-item{
-    --width:90px;
-    --height:120px;
-    box-shadow:0 10px 18px rgba(10, 30, 60, 0.2);
-  }
-
-  .floating-item.album{
-    --width:110px;
-    --height:110px;
-  }
-
-  /* Radial positioning for mobile in dark mode - evenly spaced around screen */
-  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(1) {
-    top: 20%;
-    left: 20%;
-  }
-  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(2) {
-    top: 20%;
-    left: 80%;
-  }
-  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(3) {
-    top: 80%;
-    left: 80%;
-  }
-  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(4) {
-    top: 80%;
-    left: 20%;
-  }
-  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(5) {
-    top: 50%;
-    left: 8%;
-  }
-  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(6) {
-    top: 50%;
-    left: 92%;
-  }
-  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(7) {
-    top: 8%;
-    left: 50%;
-  }
-  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(8) {
-    top: 92%;
-    left: 50%;
-  }
-}
-
-
-/* ===== Dark mode ===== */
-body.dark-mode {
-  background: #0a0a0b;
-  color: #f0f0f0;
-
-  /* Theme tokens in dark mode */
-  --fg: #f0f0f0;
-  --muted: #f0f0f0;
-  --link: #f0f0f0;
-  --link-hover: #fff;
-}
-
-body.dark-mode a,
-body.dark-mode .social-link {
-  color: var(--link);
-}
-
-body.dark-mode a:hover,
-body.dark-mode .social-link:hover {
-  color: var(--link-hover);
-}
-
