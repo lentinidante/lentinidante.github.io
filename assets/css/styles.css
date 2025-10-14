@@ -95,13 +95,34 @@ h1.name{
   border: 1.2px solid #000000;
 }
 
-/* Dark mode button styling */
+/* Dark mode pending - show during delay with dark outline/grey like hover */
+.interest-trigger.dark-mode-pending {
+  background: #d8d8d8;
+  border: 1.2px solid #000000;
+}
+
+/* Beat flash during pending state - enhanced grey/selected effect */
+.interest-trigger.beat-flash-pending {
+  background: #c0c0c0 !important;
+  border: 1.2px solid #000000 !important;
+  box-shadow: 
+    0 0 8px rgba(0, 0, 0, 0.4),
+    inset 0 0 10px rgba(0, 0, 0, 0.1) !important;
+  transition: background 0.06s ease, box-shadow 0.06s ease;
+  /* Lock sizing */
+  transform: none !important;
+  margin: 0 !important;
+  margin-right: 1px !important;
+  padding: 1px 6px !important;
+  font-size: 15px !important;
+  line-height: inherit !important;
+}
+
+/* Dark mode button styling - subtle when not flashing */
 body.dark-mode .interest-trigger {
   color: #f0f0f0;
   background: rgba(255, 255, 255, 0.1);
   border: 1.2px solid rgba(255, 255, 255, 0.3);
-  pointer-events: none; /* Disable during beat switching */
-  cursor: default;
 }
 
 body.dark-mode .interest-trigger:hover {
@@ -129,6 +150,46 @@ body.dark-mode .interest-trigger.beat-active {
   transform: scale(1.05);
   transition: all 0.1s ease;
 }
+
+
+/* Beat flash effect - Smooth blue gradients with LOCKED sizing */
+.interest-trigger.beat-flash {
+  background: var(--flash-color) !important;
+  color: #fff !important;
+  border: 1.2px solid rgba(147, 197, 253, 0.4) !important;
+  box-shadow: 
+    0 0 15px rgba(59, 130, 246, 0.4),
+    0 0 30px rgba(59, 130, 246, 0.25),
+    inset 0 0 12px rgba(255, 255, 255, 0.2) !important;
+  transition: background 0.1s ease-out, box-shadow 0.1s ease-out, color 0.1s ease-out, border 0.1s ease-out;
+  /* LOCKED sizing - absolutely NO changes */
+  transform: none !important;
+  margin: 0 !important;
+  margin-right: 1px !important;
+  padding: 1px 6px !important;
+  font-size: 15px !important;
+  line-height: inherit !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: auto !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  will-change: background, box-shadow;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .interest-trigger.beat-flash {
+  background: var(--flash-color) !important;
+  border: 1.2px solid rgba(147, 197, 253, 0.5) !important;
+  box-shadow: 
+    0 0 20px rgba(59, 130, 246, 0.5),
+    0 0 40px rgba(59, 130, 246, 0.3),
+    0 0 60px rgba(59, 130, 246, 0.2),
+    inset 0 0 15px rgba(255, 255, 255, 0.3) !important;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+/* Body pulse effect - removed to prevent background glitching */
 
 /* Pinned visual state for interest buttons - same as hover */
 .interest-trigger.pinned{
@@ -274,6 +335,7 @@ nav *,
   transition:opacity 0.35s ease, transform 0.35s ease;
 }
 
+
 .floating-cluster.active .floating-item{
   opacity:1;
   transform:translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
@@ -319,25 +381,157 @@ body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[dat
   pointer-events: auto; /* Now clickable when pinned */
 }
 
+/* Dark mode: show listen cluster with organic floating animation */
+body.dark-mode .floating-cluster[data-interest="listen"] {
+  opacity: 1;
+  pointer-events: auto; /* Albums are clickable in dark mode */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item {
+  opacity: 1;
+  position: absolute;
+}
+
+/* Organic positioning for albums in dark mode - spread towards edges with varied floating */
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(1) {
+  top: 12%;
+  left: 18%;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
+  animation: float-1 28s ease-in-out infinite;
+}
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(2) {
+  top: 8%;
+  left: 52%;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
+  animation: float-2 35s ease-in-out infinite;
+}
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(3) {
+  top: 15%;
+  left: 84%;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
+  animation: float-3 31s ease-in-out infinite;
+}
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(4) {
+  top: 48%;
+  left: 88%;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
+  animation: float-4 26s ease-in-out infinite;
+}
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(5) {
+  top: 82%;
+  left: 78%;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
+  animation: float-5 33s ease-in-out infinite;
+}
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(6) {
+  top: 86%;
+  left: 45%;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
+  animation: float-6 29s ease-in-out infinite;
+}
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(7) {
+  top: 78%;
+  left: 14%;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
+  animation: float-7 34s ease-in-out infinite;
+}
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(8) {
+  top: 44%;
+  left: 10%;
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg));
+  animation: float-8 30s ease-in-out infinite;
+}
+
+/* Individual floating animations for organic movement */
+@keyframes float-1 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
+  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-20px) translateX(15px); }
+  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-10px) translateX(30px); }
+  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(15px) translateX(10px); }
+}
+
+@keyframes float-2 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
+  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(18px) translateX(-20px); }
+  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(8px) translateX(-35px); }
+  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-12px) translateX(-15px); }
+}
+
+@keyframes float-3 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
+  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-25px) translateX(-18px); }
+  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-15px) translateX(-28px); }
+  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(10px) translateX(-8px); }
+}
+
+@keyframes float-4 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
+  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(22px) translateX(-25px); }
+  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(12px) translateX(-40px); }
+  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-18px) translateX(-20px); }
+}
+
+@keyframes float-5 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
+  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-15px) translateX(-22px); }
+  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-8px) translateX(-32px); }
+  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(20px) translateX(-12px); }
+}
+
+@keyframes float-6 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
+  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-20px) translateX(18px); }
+  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-12px) translateX(25px); }
+  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(16px) translateX(8px); }
+}
+
+@keyframes float-7 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
+  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-18px) translateX(24px); }
+  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-10px) translateX(38px); }
+  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(14px) translateX(16px); }
+}
+
+@keyframes float-8 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) translateX(0); }
+  25% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(20px) translateX(20px); }
+  50% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(10px) translateX(35px); }
+  75% { transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-15px) translateX(15px); }
+}
+
+/* Hide other interest clusters in dark mode */
+body.dark-mode .floating-cluster[data-interest="read"],
+body.dark-mode .floating-cluster[data-interest="write"] {
+  display: none;
+}
+
+/* Keep albums hoverable and clickable in dark mode */
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item.clickable-album {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+body.dark-mode .floating-cluster[data-interest="listen"] .floating-item.clickable-album:hover {
+  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1.1);
+  box-shadow: 0 0 30px rgba(0, 122, 204, 0.8);
+}
+
 
 .floating-item.clickable-album:hover{
   box-shadow: 0 18px 35px rgba(10, 30, 60, 0.35);
 }
 
 .floating-item.clickable-album.album-hover{
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1.05);
+  box-shadow: 0 18px 35px rgba(10, 30, 60, 0.45);
 }
 
 .floating-item.clickable-album.playing{
-  transform: translate(-50%, -50%) rotate(var(--rotation, 0deg)) scale(1);
-  box-shadow: 0 0 20px rgba(0, 122, 204, 0.8), 0 18px 35px rgba(10, 30, 60, 0.4);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 20px rgba(0, 122, 204, 0.8), 0 18px 35px rgba(10, 30, 60, 0.4); }
-  50% { box-shadow: 0 0 30px rgba(0, 122, 204, 1), 0 18px 35px rgba(10, 30, 60, 0.4); }
-  100% { box-shadow: 0 0 20px rgba(0, 122, 204, 0.8), 0 18px 35px rgba(10, 30, 60, 0.4); }
+  box-shadow: 0 0 15px rgba(0, 122, 204, 0.6), 0 18px 35px rgba(10, 30, 60, 0.4);
 }
 
 
@@ -351,6 +545,40 @@ body:has(.interest-trigger[data-interest="listen"].pinned) .floating-cluster[dat
   .floating-item.album{
     --width:110px;
     --height:110px;
+  }
+
+  /* Adjusted positioning for mobile in dark mode - keep them closer to edges */
+  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(1) {
+    top: 10%;
+    left: 12%;
+  }
+  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(2) {
+    top: 6%;
+    left: 52%;
+  }
+  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(3) {
+    top: 12%;
+    left: 88%;
+  }
+  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(4) {
+    top: 46%;
+    left: 90%;
+  }
+  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(5) {
+    top: 86%;
+    left: 82%;
+  }
+  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(6) {
+    top: 90%;
+    left: 48%;
+  }
+  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(7) {
+    top: 82%;
+    left: 10%;
+  }
+  body.dark-mode .floating-cluster[data-interest="listen"] .floating-item:nth-child(8) {
+    top: 42%;
+    left: 8%;
   }
 }
 
