@@ -28,7 +28,7 @@
 }
 
 [data-theme="dark"] {
-    --bg: #0b0f17;
+    --bg: #000000;
     --fg: #c8d1dc;
     --fg-strong: #ffffff;
 }
@@ -131,6 +131,10 @@ button {
     border-radius: 0; /* Square hard edge on all platforms */
 }
 
+button:focus {
+    outline: none;
+}
+
 button:hover {
     opacity: 0.8;
 }
@@ -163,10 +167,17 @@ button:active {
     width: 100%;
     height: 100%;
     display: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
 }
 
 .content-items.active {
     display: block;
+    opacity: 1;
+}
+
+.content-items.fade-out {
+    opacity: 0;
 }
 
 .content-item {
