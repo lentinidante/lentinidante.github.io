@@ -8,9 +8,16 @@
 </head>
 <body>
     <main>
+        <!-- Content Display Areas -->
+        <div class="content-grid">
+            <div class="content-items" id="content-items">
+                <!-- Content will be dynamically populated here -->
+            </div>
+        </div>
+        
         <h1>Hi,</h1>
         <p>
-            I like to <button>read</button>, <button>write</button>, and <button>listen</button>.<br><br>
+            I like to <button id="read-btn">read</button>, <button id="write-btn">write</button>, and <button id="listen-btn">listen</button>.<br><br>
             I'm a Growth Hacker. In my past, I<br>
             left college, made <span class="white">tiktoks</span> and joined<br>
             <span class="white">startups</span>— all of which led me to SF,<br>
@@ -28,6 +35,207 @@
             <a href="#">dark-mode.exe</a>
         </nav>
     </main>
+    
+    <!-- Audio element for music playback -->
+    <audio id="audio-player" preload="none"></audio>
+    
+    <script>
+        // Content data
+        const contentData = {
+            read: [
+                { type: 'book', image: 'assets/images/books/blue_ocean.jpg', title: 'Blue Ocean Strategy' },
+                { type: 'book', image: 'assets/images/books/build.jpg', title: 'Build' },
+                { type: 'book', image: 'assets/images/books/founding_sales.jpg', title: 'Founding Sales' },
+                { type: 'book', image: 'assets/images/books/lean_startup.jpg', title: 'The Lean Startup' },
+                { type: 'book', image: 'assets/images/books/read_write_own.jpg', title: 'Read Write Own' },
+                { type: 'book', image: 'assets/images/books/the_cold_start.jpg', title: 'The Cold Start Problem' },
+                { type: 'book', image: 'assets/images/books/the_courage.jpg', title: 'The Courage to be Disliked' },
+                { type: 'book', image: 'assets/images/books/total_freedom.jpg', title: 'Total Freedom' }
+            ],
+            write: [
+                { type: 'letter', image: 'assets/images/books/blue_ocean.jpg', title: 'Letter 1' },
+                { type: 'letter', image: 'assets/images/books/build.jpg', title: 'Letter 2' },
+                { type: 'letter', image: 'assets/images/books/founding_sales.jpg', title: 'Letter 3' },
+                { type: 'letter', image: 'assets/images/books/lean_startup.jpg', title: 'Letter 4' },
+                { type: 'letter', image: 'assets/images/books/read_write_own.jpg', title: 'Letter 5' },
+                { type: 'letter', image: 'assets/images/books/the_cold_start.jpg', title: 'Letter 6' },
+                { type: 'letter', image: 'assets/images/books/the_courage.jpg', title: 'Letter 7' },
+                { type: 'letter', image: 'assets/images/books/total_freedom.jpg', title: 'Letter 8' }
+            ],
+            listen: [
+                { type: 'album', image: 'assets/images/albums/album-01.jpg', title: 'Track 01', audio: 'assets/audio/track-01.mp3' },
+                { type: 'album', image: 'assets/images/albums/album-02.jpg', title: 'Track 02', audio: 'assets/audio/track-02.mp3' },
+                { type: 'album', image: 'assets/images/albums/album-03.jpg', title: 'Track 03', audio: 'assets/audio/track-03.mp3' },
+                { type: 'album', image: 'assets/images/albums/album-04.jpg', title: 'Track 04', audio: 'assets/audio/track-04.mp3' },
+                { type: 'album', image: 'assets/images/albums/album-05.jpg', title: 'Track 05', audio: 'assets/audio/track-05.mp3' },
+                { type: 'album', image: 'assets/images/albums/album-06.jpg', title: 'Track 06', audio: 'assets/audio/track-06.mp3' },
+                { type: 'album', image: 'assets/images/albums/album-07.jpg', title: 'Track 07', audio: 'assets/audio/track-07.mp3' },
+                { type: 'album', image: 'assets/images/albums/album-08.jpg', title: 'Track 08', audio: 'assets/audio/track-08.mp3' }
+            ]
+        };
+
+        // DOM elements
+        const readBtn = document.getElementById('read-btn');
+        const writeBtn = document.getElementById('write-btn');
+        const listenBtn = document.getElementById('listen-btn');
+        const contentItems = document.getElementById('content-items');
+        const audioPlayer = document.getElementById('audio-player');
+
+        let currentMode = null;
+        let currentlyPlaying = null;
+        let isButtonActive = false; // Track if a button is actively pressed
+
+        // Button event listeners
+        readBtn.addEventListener('click', () => {
+            if (currentMode === 'read' && isButtonActive) {
+                // If same button is clicked and active, deactivate it
+                hideContent();
+            } else {
+                isButtonActive = true;
+                showContent('read');
+            }
+        });
+        writeBtn.addEventListener('click', () => {
+            if (currentMode === 'write' && isButtonActive) {
+                // If same button is clicked and active, deactivate it
+                hideContent();
+            } else {
+                isButtonActive = true;
+                showContent('write');
+            }
+        });
+        listenBtn.addEventListener('click', () => {
+            if (currentMode === 'listen' && isButtonActive) {
+                // If same button is clicked and active, deactivate it
+                hideContent();
+            } else {
+                isButtonActive = true;
+                showContent('listen');
+            }
+        });
+
+        // Hover event listeners
+        readBtn.addEventListener('mouseenter', () => {
+            if (!isButtonActive) {
+                showContent('read');
+            }
+        });
+        writeBtn.addEventListener('mouseenter', () => {
+            if (!isButtonActive) {
+                showContent('write');
+            }
+        });
+        listenBtn.addEventListener('mouseenter', () => {
+            if (!isButtonActive) {
+                showContent('listen');
+            }
+        });
+
+        // Mouse leave events to hide content when not hovering (only if no button is active)
+        [readBtn, writeBtn, listenBtn].forEach(btn => {
+            btn.addEventListener('mouseleave', () => {
+                setTimeout(() => {
+                    if (!isHoveringAnyButton() && !isButtonActive) {
+                        hideContent();
+                    }
+                }, 100);
+            });
+        });
+
+        // Click outside to deactivate button mode
+        document.addEventListener('click', (e) => {
+            if (!readBtn.contains(e.target) && !writeBtn.contains(e.target) && !listenBtn.contains(e.target)) {
+                isButtonActive = false;
+                if (!isHoveringAnyButton()) {
+                    hideContent();
+                }
+            }
+        });
+
+        function isHoveringAnyButton() {
+            return readBtn.matches(':hover') || writeBtn.matches(':hover') || listenBtn.matches(':hover');
+        }
+
+        function showContent(mode) {
+            // Remove active class from all buttons
+            [readBtn, writeBtn, listenBtn].forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to current button
+            document.getElementById(mode + '-btn').classList.add('active');
+
+            // Update current mode
+            currentMode = mode;
+
+            // Clear existing content
+            contentItems.innerHTML = '';
+
+            // Add new content items
+            contentData[mode].forEach((item, index) => {
+                const contentItem = document.createElement('div');
+                contentItem.className = 'content-item';
+                contentItem.innerHTML = `<img src="${item.image}" alt="${item.title}" title="${item.title}">`;
+                
+                // Add click event for albums
+                if (item.type === 'album') {
+                    contentItem.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        playAudio(item.audio, contentItem);
+                    });
+                }
+                
+                contentItems.appendChild(contentItem);
+            });
+
+            // Set the data mode for CSS targeting
+            contentItems.setAttribute('data-mode', mode);
+            
+            // Show content with animation
+            contentItems.classList.add('active');
+        }
+
+        function hideContent() {
+            contentItems.classList.remove('active');
+            [readBtn, writeBtn, listenBtn].forEach(btn => btn.classList.remove('active'));
+            currentMode = null;
+            isButtonActive = false;
+        }
+
+        function playAudio(audioSrc, element) {
+            // If clicking the same track, toggle play/pause
+            if (currentlyPlaying === audioSrc) {
+                if (!audioPlayer.paused) {
+                    audioPlayer.pause();
+                } else {
+                    audioPlayer.play();
+                }
+                return;
+            }
+
+            // Stop currently playing audio and start new one
+            if (currentlyPlaying) {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+            }
+
+            // Play new audio
+            audioPlayer.src = audioSrc;
+            audioPlayer.play().then(() => {
+                currentlyPlaying = audioSrc;
+            }).catch(error => {
+                console.log('Audio playback failed:', error);
+            });
+        }
+
+        // Handle audio events
+        audioPlayer.addEventListener('ended', () => {
+            currentlyPlaying = null;
+        });
+
+        audioPlayer.addEventListener('error', () => {
+            console.log('Audio error occurred');
+            currentlyPlaying = null;
+        });
+    </script>
 </body>
 </html>
 
