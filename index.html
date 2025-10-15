@@ -374,14 +374,19 @@
             if (toggleTimeoutId) clearTimeout(toggleTimeoutId);
             if (next === 'dark') {
                 // delayed enter to dark
-                // Ensure content is visible immediately (start with READ) while waiting
-                isButtonActive = true;
-                showContent('read');
                 preloadReadImages();
                 strobeWindowUntil = performance.now() + 5800;
+                // On mobile: do NOT show books immediately to avoid accidental press; reveal with theme
+                if (!isMobile) {
+                    isButtonActive = true;
+                    showContent('read');
+                }
                 toggleTimeoutId = setTimeout(() => {
                     rootEl.setAttribute('data-theme', 'dark');
                     if (starCanvas) starCanvas.style.display = 'block';
+                    // Reveal books exactly when dark applies (mobile and desktop)
+                    isButtonActive = true;
+                    showContent('read');
                     setAutoCycle(true); // start 118 BPM cycle in dark
                     isThemeToggling = false;
                     strobeWindowUntil = 0; // end strobe window
