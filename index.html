@@ -8,8 +8,10 @@
 </head>
 <body>
     <main>
+        <canvas id="starfield" style="position:fixed;inset:0;z-index:0;pointer-events:none;display:none"></canvas>
+        
         <!-- Content Display Areas -->
-        <div class="content-grid">
+        <div class="content-grid" style="z-index:1">
             <div class="content-items" id="content-items">
                 <!-- Content will be dynamically populated here -->
             </div>
@@ -32,7 +34,7 @@
             <a href="https://linkedin.com/in/lentinidante" target="_blank">LinkedIn</a>
             <a href="https://x.com/lentinidante" target="_blank">X</a>
             <a href="momsaidhavefun.pdf" target="_blank"><3</a>
-            <a href="#">dark-mode.exe</a>
+            <a href="#" id="dark-mode-toggle">dark-mode.exe</a>
         </nav>
     </main>
     
@@ -40,6 +42,19 @@
     <audio id="audio-player" preload="none"></audio>
     
     <script>
+        // Theme init
+        const rootEl = document.documentElement;
+        const THEME_KEY = 'theme-preference';
+        const sfx = new Audio('assets/audio/dark-mode.mp3');
+        sfx.preload = 'auto';
+        sfx.crossOrigin = 'anonymous';
+        sfx.volume = 1.0;
+        const initialStarCanvas = document.getElementById('starfield');
+        // Force default light on load; ignore saved dark preference
+        rootEl.removeAttribute('data-theme');
+        if (initialStarCanvas) initialStarCanvas.style.display = 'none';
+        localStorage.setItem(THEME_KEY, 'light');
+
         // Content data
         const contentData = {
             read: [
@@ -80,23 +95,22 @@
         const listenBtn = document.getElementById('listen-btn');
         const contentItems = document.getElementById('content-items');
         const audioPlayer = document.getElementById('audio-player');
+        const darkToggle = document.getElementById('dark-mode-toggle');
+        const starCanvas = document.getElementById('starfield');
+        let isThemeToggling = false;
+        let toggleTimeoutId = null;
+        let pendingDark = false; // tracks a scheduled (not yet applied) dark mode
+        let preloadedRead = false;
 
         let currentMode = null;
         let currentlyPlaying = null;
         let isButtonActive = false; // Track if a button is actively pressed
-        let hasUserInteracted = false; // Track if user has interacted for mobile audio
         let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        let audioPermissionGranted = false; // Track if audio permission has been granted
-        let clickCount = 0; // Track clicks for multi-click audio permission
 
-        // Track user interaction for mobile audio
-        function markUserInteracted() {
-            hasUserInteracted = true;
-        }
+        // (mobile audio interaction tracking no longer required)
 
         // Button event listeners
         readBtn.addEventListener('click', () => {
-            markUserInteracted();
             if (currentMode === 'read' && isButtonActive) {
                 // If same button is clicked and active, deactivate it
                 hideContent();
@@ -106,7 +120,6 @@
             }
         });
         writeBtn.addEventListener('click', () => {
-            markUserInteracted();
             if (currentMode === 'write' && isButtonActive) {
                 // If same button is clicked and active, deactivate it
                 hideContent();
@@ -116,7 +129,6 @@
             }
         });
         listenBtn.addEventListener('click', () => {
-            markUserInteracted();
             if (currentMode === 'listen' && isButtonActive) {
                 // If same button is clicked and active, deactivate it
                 hideContent();
@@ -197,7 +209,7 @@
                     contentItem.addEventListener('click', (e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        markUserInteracted();
+                        
                         playAudio(item.audio, contentItem);
                         // Prevent the document click handler from hiding content
                         isButtonActive = true;
@@ -207,7 +219,7 @@
                     contentItem.addEventListener('touchend', (e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        markUserInteracted();
+                        
                         playAudio(item.audio, contentItem);
                         // Prevent the document click handler from hiding content
                         isButtonActive = true;
@@ -233,10 +245,7 @@
 
         function playAudio(audioSrc, element) {
             // Increment click count for multi-click permission
-            clickCount++;
             
-            // Mark user interaction
-            markUserInteracted();
             
             // If clicking the same track, toggle play/pause
             if (currentlyPlaying === audioSrc) {
@@ -289,7 +298,7 @@
             if (playPromise !== undefined) {
                 playPromise.then(() => {
                     currentlyPlaying = audioSrc;
-                    audioPermissionGranted = true;
+                    
                     // Add visual feedback
                     if (element) {
                         element.style.opacity = '0.7';
@@ -330,12 +339,162 @@
         });
 
         // Add touch event listeners for mobile audio permissions
-        if (isMobile) {
-            // Track user interaction for audio permissions
-            document.addEventListener('touchstart', markUserInteracted);
-            document.addEventListener('touchend', markUserInteracted);
-            document.addEventListener('click', markUserInteracted);
+        // mobile audio interaction tracking removed
+
+        function preloadReadImages(){
+            if (preloadedRead) return;
+            try {
+                (contentData.read || []).forEach(item => { const img = new Image(); img.src = item.image; });
+                preloadedRead = true;
+            } catch(_) {}
         }
+
+        // Dark mode toggle
+        darkToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            // If a delayed dark is pending, clicking again cancels everything
+            if (pendingDark) {
+                if (toggleTimeoutId) { clearTimeout(toggleTimeoutId); toggleTimeoutId = null; }
+                pendingDark = false;
+                isThemeToggling = false;
+                // ensure we remain in light mode
+                rootEl.removeAttribute('data-theme');
+                if (starCanvas) starCanvas.style.display = 'none';
+                setAutoCycle(false);
+                try { sfx.pause(); sfx.currentTime = 0; } catch(_) {}
+                hideContent();
+                localStorage.setItem(THEME_KEY, 'light');
+                return;
+            }
+            if (isThemeToggling) return;
+            const isDark = rootEl.getAttribute('data-theme') === 'dark';
+            const next = isDark ? 'light' : 'dark';
+            // guard against rapid re-clicks
+            isThemeToggling = true;
+            if (toggleTimeoutId) clearTimeout(toggleTimeoutId);
+            if (next === 'dark') {
+                // delayed enter to dark
+                // Ensure content is visible immediately (start with READ) while waiting
+                isButtonActive = true;
+                showContent('read');
+                preloadReadImages();
+                strobeWindowUntil = performance.now() + 5800;
+                toggleTimeoutId = setTimeout(() => {
+                    rootEl.setAttribute('data-theme', 'dark');
+                    if (starCanvas) starCanvas.style.display = 'block';
+                    setAutoCycle(true); // start 118 BPM cycle in dark
+                    isThemeToggling = false;
+                    strobeWindowUntil = 0; // end strobe window
+                    pendingDark = false;
+                    localStorage.setItem(THEME_KEY, 'dark');
+                }, 5800);
+                pendingDark = true;
+            } else {
+                // instant exit to light, cancel pending enter
+                if (toggleTimeoutId) { clearTimeout(toggleTimeoutId); toggleTimeoutId = null; }
+                rootEl.removeAttribute('data-theme');
+                if (starCanvas) starCanvas.style.display = 'none';
+                setAutoCycle(false);
+                strobeWindowUntil = 0;
+                isThemeToggling = false;
+                // stop and reset dark-mode sound so it can restart fresh later
+                try { sfx.pause(); sfx.currentTime = 0; } catch (_) {}
+                pendingDark = false;
+                localStorage.setItem(THEME_KEY, 'light');
+            }
+            // Play SFX without interrupting main audio
+            try {
+                if (next === 'dark') {
+                    const wasPaused = audioPlayer.paused;
+                    sfx.currentTime = 0;
+                    sfx.play().catch(() => {});
+                    if (!wasPaused && audioPlayer.paused) {
+                        audioPlayer.play().catch(() => {});
+                    }
+                } else {
+                    sfx.pause();
+                    sfx.currentTime = 0;
+                }
+            } catch (_) {}
+        });
+
+        // Starfield animation (enabled in dark mode)
+        (function initStarfield(){
+            const canvas = document.getElementById('starfield');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            let meteors = [];
+            function resize(){
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                stars = Array.from({length: Math.floor((canvas.width*canvas.height)/9000)}, () => ({
+                    x: Math.random()*canvas.width,
+                    y: Math.random()*canvas.height,
+                    tw: Math.random()*Math.PI*2,
+                    sp: 0.5 + Math.random()*0.5,
+                    r: 0.6 + Math.random()*1.2
+                }));
+            }
+            window.addEventListener('resize', resize);
+            resize();
+            function tick(){
+                if (canvas.style.display !== 'block') { requestAnimationFrame(tick); return; }
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                // twinkle stars
+                for (const s of stars){
+                    s.tw += 0.02*s.sp;
+                    const alpha = 0.3 + 0.7*(0.5+0.5*Math.sin(s.tw));
+                    ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+                    ctx.fill();
+                }
+                // meteors
+                if (Math.random()<0.01 && meteors.length<2){
+                    meteors.push({x: Math.random()*canvas.width, y: -20, vx: -6-Math.random()*4, vy: 10+Math.random()*6, life: 1});
+                }
+                for (let i=meteors.length-1;i>=0;i--){
+                    const m = meteors[i];
+                    m.x += m.vx; m.y += m.vy; m.life -= 0.01;
+                    const grad = ctx.createLinearGradient(m.x, m.y, m.x-m.vx*6, m.y-m.vy*6);
+                    grad.addColorStop(0, 'rgba(255,255,255,0.9)');
+                    grad.addColorStop(1, 'rgba(255,255,255,0)');
+                    ctx.strokeStyle = grad;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(m.x, m.y);
+                    ctx.lineTo(m.x-m.vx*6, m.y-m.vy*6);
+                    ctx.stroke();
+                    if (m.life<=0 || m.y>canvas.height+50) meteors.splice(i,1);
+                }
+                requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        })();
+
+        // 118 BPM half-beat auto-cycle (255ms)
+        const beatMs = 510;
+        let cycleIndex = 0;
+        const cycleButtons = [readBtn, writeBtn, listenBtn];
+        let autoCycleTimer = null;
+        function setAutoCycle(on){
+            if (on && !autoCycleTimer){
+                autoCycleTimer = setInterval(() => {
+                    const btn = cycleButtons[cycleIndex % cycleButtons.length];
+                    btn.classList.add('active');
+                    setTimeout(()=>btn.classList.remove('active'), Math.max(120, Math.floor(beatMs*0.45)));
+                    isButtonActive = false;
+                    showContent(['read','write','listen'][cycleIndex % 3]);
+                    cycleIndex++;
+                }, beatMs);
+            } else if (!on && autoCycleTimer){
+                clearInterval(autoCycleTimer);
+                autoCycleTimer = null;
+            }
+        }
+        // keep off on load to prevent flashing
+        setAutoCycle(false);
     </script>
 </body>
 </html>
