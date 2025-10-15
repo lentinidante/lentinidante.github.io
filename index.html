@@ -21,7 +21,7 @@
             I'm a Growth Hacker. In my past, I<br>
             left college, made <span class="white">tiktoks</span> and joined<br>
             <span class="white">startups</span>— all of which led me to SF,<br>
-            where I'm now at <span class="white">Founders, Inc.</span>
+            where I'm now at <span class="white-bold">Founders, Inc.</span>
         </p>
         <div class="signature">
          MSHF,<br>
@@ -203,18 +203,15 @@
                         isButtonActive = true;
                     });
                     
-                    // Also add touch events for mobile
-                    if (isMobile) {
-                        contentItem.addEventListener('touchstart', (e) => {
-                            e.stopPropagation();
-                            markUserInteracted();
-                        });
-                        
-                        contentItem.addEventListener('touchend', (e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                        });
-                    }
+                    // Add touch events for mobile/iOS
+                    contentItem.addEventListener('touchend', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        markUserInteracted();
+                        playAudio(item.audio, contentItem);
+                        // Prevent the document click handler from hiding content
+                        isButtonActive = true;
+                    });
                 }
                 
                 contentItems.appendChild(contentItem);
@@ -264,11 +261,30 @@
         }
         
         function attemptAudioPlay(audioSrc, element) {
-            // Set audio source
+            // Set audio source and properties for iOS compatibility
             audioPlayer.src = audioSrc;
-            audioPlayer.load(); // Ensure audio is loaded
+            audioPlayer.volume = 1.0;
+            audioPlayer.preload = 'auto';
+            audioPlayer.load();
             
-            // Try to play with proper error handling
+            // For iOS, we need to set the audio context and ensure it's ready
+            if (isMobile) {
+                // Ensure the audio element is ready
+                audioPlayer.addEventListener('canplaythrough', function playWhenReady() {
+                    audioPlayer.removeEventListener('canplaythrough', playWhenReady);
+                    tryPlayAudio(audioSrc, element);
+                }, { once: true });
+                
+                // Fallback if canplaythrough doesn't fire
+                setTimeout(() => {
+                    tryPlayAudio(audioSrc, element);
+                }, 100);
+            } else {
+                tryPlayAudio(audioSrc, element);
+            }
+        }
+        
+        function tryPlayAudio(audioSrc, element) {
             const playPromise = audioPlayer.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
@@ -283,18 +299,14 @@
                     }
                 }).catch(error => {
                     console.log('Audio playback failed:', error);
-                    // On mobile, this might be due to autoplay policy
-                    if (isMobile) {
-                        console.log('Mobile audio requires user interaction');
-                        // Show visual feedback that user needs to interact more
-                        if (element) {
-                            element.style.opacity = '0.5';
-                            element.style.transform = 'scale(0.95)';
-                            setTimeout(() => {
-                                element.style.opacity = '1';
-                                element.style.transform = 'scale(1)';
-                            }, 300);
-                        }
+                    // Show visual feedback that audio failed
+                    if (element) {
+                        element.style.opacity = '0.5';
+                        element.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            element.style.opacity = '1';
+                            element.style.transform = 'scale(1)';
+                        }, 300);
                     }
                 });
             }
