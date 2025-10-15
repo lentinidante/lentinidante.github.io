@@ -86,6 +86,8 @@
         let isButtonActive = false; // Track if a button is actively pressed
         let hasUserInteracted = false; // Track if user has interacted for mobile audio
         let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        let audioPermissionGranted = false; // Track if audio permission has been granted
+        let clickCount = 0; // Track clicks for multi-click audio permission
 
         // Track user interaction for mobile audio
         function markUserInteracted() {
@@ -154,6 +156,11 @@
 
         // Click outside to deactivate button mode (but not on mobile)
         document.addEventListener('click', (e) => {
+            // Don't hide content if clicking on album items
+            if (e.target.closest('.content-item')) {
+                return;
+            }
+            
             if (!isMobile && !readBtn.contains(e.target) && !writeBtn.contains(e.target) && !listenBtn.contains(e.target)) {
                 isButtonActive = false;
                 if (!isHoveringAnyButton()) {
@@ -189,9 +196,25 @@
                 if (item.type === 'album') {
                     contentItem.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        e.preventDefault();
                         markUserInteracted();
                         playAudio(item.audio, contentItem);
+                        // Prevent the document click handler from hiding content
+                        isButtonActive = true;
                     });
+                    
+                    // Also add touch events for mobile
+                    if (isMobile) {
+                        contentItem.addEventListener('touchstart', (e) => {
+                            e.stopPropagation();
+                            markUserInteracted();
+                        });
+                        
+                        contentItem.addEventListener('touchend', (e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                        });
+                    }
                 }
                 
                 contentItems.appendChild(contentItem);
@@ -212,18 +235,20 @@
         }
 
         function playAudio(audioSrc, element) {
+            // Increment click count for multi-click permission
+            clickCount++;
+            
+            // Mark user interaction
+            markUserInteracted();
+            
             // If clicking the same track, toggle play/pause
             if (currentlyPlaying === audioSrc) {
                 if (!audioPlayer.paused) {
                     audioPlayer.pause();
+                    currentlyPlaying = null;
                 } else {
-                    // For mobile, ensure user has interacted
-                    if (isMobile && !hasUserInteracted) {
-                        return;
-                    }
-                    audioPlayer.play().catch(error => {
-                        console.log('Audio playback failed:', error);
-                    });
+                    // Try to play with permission handling
+                    attemptAudioPlay(audioSrc, element);
                 }
                 return;
             }
@@ -234,22 +259,43 @@
                 audioPlayer.currentTime = 0;
             }
 
+            // Try to play new audio
+            attemptAudioPlay(audioSrc, element);
+        }
+        
+        function attemptAudioPlay(audioSrc, element) {
             // Set audio source
             audioPlayer.src = audioSrc;
             audioPlayer.load(); // Ensure audio is loaded
             
-            // For mobile, ensure user has interacted before playing
-            if (isMobile && !hasUserInteracted) {
-                return;
+            // For mobile, try multiple approaches to get permission
+            if (isMobile) {
+                // Method 1: Try playing with user interaction
+                if (hasUserInteracted || clickCount >= 2) {
+                    playWithPermission(audioSrc, element);
+                } else {
+                    // Method 2: Silent play to get permission, then play real audio
+                    attemptSilentPlay().then(() => {
+                        playWithPermission(audioSrc, element);
+                    }).catch(() => {
+                        // Method 3: Show visual feedback that user needs to interact more
+                        showAudioPermissionHint(element);
+                    });
+                }
+            } else {
+                // Desktop: try to play directly
+                playWithPermission(audioSrc, element);
             }
-
-            // Play new audio with proper error handling
+        }
+        
+        function playWithPermission(audioSrc, element) {
             const playPromise = audioPlayer.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
                     currentlyPlaying = audioSrc;
-                    // Add visual feedback for mobile
-                    if (isMobile && element) {
+                    audioPermissionGranted = true;
+                    // Add visual feedback
+                    if (element) {
                         element.style.opacity = '0.7';
                         setTimeout(() => {
                             element.style.opacity = '1';
@@ -257,11 +303,28 @@
                     }
                 }).catch(error => {
                     console.log('Audio playback failed:', error);
-                    // On mobile, this might be due to autoplay policy
-                    if (isMobile) {
-                        console.log('Mobile audio requires user interaction');
-                    }
+                    // Try silent play to get permission
+                    attemptSilentPlay();
                 });
+            }
+        }
+        
+        function attemptSilentPlay() {
+            // Create a silent audio to get permission
+            const silentAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
+            silentAudio.volume = 0;
+            return silentAudio.play();
+        }
+        
+        function showAudioPermissionHint(element) {
+            // Visual feedback that user needs to interact more
+            if (element) {
+                element.style.opacity = '0.5';
+                element.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                    element.style.transform = 'scale(1)';
+                }, 300);
             }
         }
 
@@ -274,11 +337,32 @@
             console.log('Audio error occurred');
             currentlyPlaying = null;
         });
+        
+        // Handle page visibility changes to pause audio when tab is hidden
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && !audioPlayer.paused) {
+                audioPlayer.pause();
+            }
+        });
 
-        // Add touch event listeners for mobile
+        // Add comprehensive touch event listeners for mobile audio permissions
         if (isMobile) {
-            document.addEventListener('touchstart', markUserInteracted, { once: true });
-            document.addEventListener('touchend', markUserInteracted, { once: true });
+            // Multiple touch events to ensure permission is granted
+            document.addEventListener('touchstart', markUserInteracted);
+            document.addEventListener('touchend', markUserInteracted);
+            document.addEventListener('click', markUserInteracted);
+            
+            // Try to get audio permission on first interaction
+            document.addEventListener('touchstart', () => {
+                if (!audioPermissionGranted) {
+                    attemptSilentPlay().then(() => {
+                        audioPermissionGranted = true;
+                        console.log('Audio permission granted via touch');
+                    }).catch(() => {
+                        console.log('Audio permission not yet granted');
+                    });
+                }
+            }, { once: true });
         }
     </script>
 </body>
