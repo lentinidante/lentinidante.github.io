@@ -268,27 +268,7 @@
             audioPlayer.src = audioSrc;
             audioPlayer.load(); // Ensure audio is loaded
             
-            // For mobile, try multiple approaches to get permission
-            if (isMobile) {
-                // Method 1: Try playing with user interaction
-                if (hasUserInteracted || clickCount >= 2) {
-                    playWithPermission(audioSrc, element);
-                } else {
-                    // Method 2: Silent play to get permission, then play real audio
-                    attemptSilentPlay().then(() => {
-                        playWithPermission(audioSrc, element);
-                    }).catch(() => {
-                        // Method 3: Show visual feedback that user needs to interact more
-                        showAudioPermissionHint(element);
-                    });
-                }
-            } else {
-                // Desktop: try to play directly
-                playWithPermission(audioSrc, element);
-            }
-        }
-        
-        function playWithPermission(audioSrc, element) {
+            // Try to play with proper error handling
             const playPromise = audioPlayer.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
@@ -303,28 +283,20 @@
                     }
                 }).catch(error => {
                     console.log('Audio playback failed:', error);
-                    // Try silent play to get permission
-                    attemptSilentPlay();
+                    // On mobile, this might be due to autoplay policy
+                    if (isMobile) {
+                        console.log('Mobile audio requires user interaction');
+                        // Show visual feedback that user needs to interact more
+                        if (element) {
+                            element.style.opacity = '0.5';
+                            element.style.transform = 'scale(0.95)';
+                            setTimeout(() => {
+                                element.style.opacity = '1';
+                                element.style.transform = 'scale(1)';
+                            }, 300);
+                        }
+                    }
                 });
-            }
-        }
-        
-        function attemptSilentPlay() {
-            // Create a silent audio to get permission
-            const silentAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
-            silentAudio.volume = 0;
-            return silentAudio.play();
-        }
-        
-        function showAudioPermissionHint(element) {
-            // Visual feedback that user needs to interact more
-            if (element) {
-                element.style.opacity = '0.5';
-                element.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    element.style.opacity = '1';
-                    element.style.transform = 'scale(1)';
-                }, 300);
             }
         }
 
@@ -345,24 +317,12 @@
             }
         });
 
-        // Add comprehensive touch event listeners for mobile audio permissions
+        // Add touch event listeners for mobile audio permissions
         if (isMobile) {
-            // Multiple touch events to ensure permission is granted
+            // Track user interaction for audio permissions
             document.addEventListener('touchstart', markUserInteracted);
             document.addEventListener('touchend', markUserInteracted);
             document.addEventListener('click', markUserInteracted);
-            
-            // Try to get audio permission on first interaction
-            document.addEventListener('touchstart', () => {
-                if (!audioPermissionGranted) {
-                    attemptSilentPlay().then(() => {
-                        audioPermissionGranted = true;
-                        console.log('Audio permission granted via touch');
-                    }).catch(() => {
-                        console.log('Audio permission not yet granted');
-                    });
-                }
-            }, { once: true });
         }
     </script>
 </body>
