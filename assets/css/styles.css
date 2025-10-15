@@ -113,6 +113,8 @@ button {
     all: revert;
     cursor: pointer;
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    touch-action: manipulation; /* Optimize touch interactions */
 }
 
 button:hover {
@@ -124,6 +126,12 @@ button.active {
     color: var(--bg);
     padding: 4px 8px;
     border-radius: 4px;
+}
+
+/* Active state for mobile touch */
+button:active {
+    opacity: 0.6;
+    transform: scale(0.98);
 }
 
 /* Content Grid */
@@ -159,6 +167,10 @@ button.active {
     pointer-events: all;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.1);
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    touch-action: manipulation; /* Optimize touch interactions */
+    will-change: transform, opacity; /* Optimize for animations */
+    backface-visibility: hidden; /* Prevent flickering on mobile */
 }
 
 .content-item:hover {
@@ -263,25 +275,25 @@ button.active {
 }
 
 .content-items[data-mode="write"] .content-item:nth-child(5) {
-    bottom: 130px;
+    bottom: 80px;
     left: calc(50% - 240px);
     transform: rotate(6deg);
 }
 
 .content-items[data-mode="write"] .content-item:nth-child(6) {
-    bottom: 110px;
+    bottom: 60px;
     left: calc(50% - 130px);
     transform: rotate(-3deg);
 }
 
 .content-items[data-mode="write"] .content-item:nth-child(7) {
-    bottom: 110px;
+    bottom: 60px;
     right: calc(50% - 130px);
     transform: rotate(9deg);
 }
 
 .content-items[data-mode="write"] .content-item:nth-child(8) {
-    bottom: 130px;
+    bottom: 80px;
     right: calc(50% - 240px);
     transform: rotate(-7deg);
 }
@@ -312,25 +324,25 @@ button.active {
 }
 
 .content-items[data-mode="listen"] .content-item:nth-child(5) {
-    bottom: 130px;
+    bottom: 80px;
     left: calc(50% - 240px);
     transform: rotate(7deg);
 }
 
 .content-items[data-mode="listen"] .content-item:nth-child(6) {
-    bottom: 110px;
+    bottom: 60px;
     left: calc(50% - 130px);
     transform: rotate(-3deg);
 }
 
 .content-items[data-mode="listen"] .content-item:nth-child(7) {
-    bottom: 110px;
+    bottom: 60px;
     right: calc(50% - 130px);
     transform: rotate(5deg);
 }
 
 .content-items[data-mode="listen"] .content-item:nth-child(8) {
-    bottom: 130px;
+    bottom: 80px;
     right: calc(50% - 240px);
     transform: rotate(-5deg);
 }
@@ -339,4 +351,109 @@ button.active {
 .content-item:hover {
     transform: scale(1.05) rotate(0deg) !important;
     z-index: 10;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 40px 20px;
+        font-size: 18px; /* Slightly smaller text on mobile */
+    }
+    
+    /* Improve touch targets on mobile */
+    .content-item {
+        width: 130px;
+        height: 130px;
+    }
+    
+    /* Move listen elements to match write positioning on mobile */
+    .content-items[data-mode="listen"] .content-item:nth-child(5) {
+        bottom: 130px;
+    }
+    
+    .content-items[data-mode="listen"] .content-item:nth-child(6) {
+        bottom: 110px;
+    }
+    
+    .content-items[data-mode="listen"] .content-item:nth-child(7) {
+        bottom: 110px;
+    }
+    
+    .content-items[data-mode="listen"] .content-item:nth-child(8) {
+        bottom: 130px;
+    }
+    
+    /* Also move write elements down for consistency */
+    .content-items[data-mode="write"] .content-item:nth-child(5) {
+        bottom: 130px;
+    }
+    
+    .content-items[data-mode="write"] .content-item:nth-child(6) {
+        bottom: 110px;
+    }
+    
+    .content-items[data-mode="write"] .content-item:nth-child(7) {
+        bottom: 110px;
+    }
+    
+    .content-items[data-mode="write"] .content-item:nth-child(8) {
+        bottom: 130px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 30px 15px;
+        font-size: 16px;
+    }
+    
+    /* Even larger touch targets on very small screens */
+    .content-item {
+        width: 140px;
+        height: 140px;
+    }
+    
+    /* Adjust positioning for smaller screens */
+    .content-items[data-mode="read"] .content-item:nth-child(1),
+    .content-items[data-mode="read"] .content-item:nth-child(4) {
+        left: calc(50% - 180px);
+        right: calc(50% - 180px);
+    }
+    
+    .content-items[data-mode="write"] .content-item:nth-child(1),
+    .content-items[data-mode="write"] .content-item:nth-child(4),
+    .content-items[data-mode="write"] .content-item:nth-child(5),
+    .content-items[data-mode="write"] .content-item:nth-child(8) {
+        left: calc(50% - 180px);
+        right: calc(50% - 180px);
+    }
+    
+    .content-items[data-mode="listen"] .content-item:nth-child(1),
+    .content-items[data-mode="listen"] .content-item:nth-child(4),
+    .content-items[data-mode="listen"] .content-item:nth-child(5),
+    .content-items[data-mode="listen"] .content-item:nth-child(8) {
+        left: calc(50% - 180px);
+        right: calc(50% - 180px);
+    }
+    
+    /* Match write positioning on very narrow screens */
+    .content-items[data-mode="listen"] .content-item:nth-child(5),
+    .content-items[data-mode="listen"] .content-item:nth-child(8) {
+        bottom: 160px;
+    }
+    
+    .content-items[data-mode="listen"] .content-item:nth-child(6),
+    .content-items[data-mode="listen"] .content-item:nth-child(7) {
+        bottom: 140px;
+    }
+    
+    .content-items[data-mode="write"] .content-item:nth-child(5),
+    .content-items[data-mode="write"] .content-item:nth-child(8) {
+        bottom: 160px;
+    }
+    
+    .content-items[data-mode="write"] .content-item:nth-child(6),
+    .content-items[data-mode="write"] .content-item:nth-child(7) {
+        bottom: 140px;
+    }
 }
