@@ -27,6 +27,12 @@
     --fg-strong: #fff;
 }
 
+[data-theme="dark"] {
+    --bg: #0b0f17;
+    --fg: #c8d1dc;
+    --fg-strong: #ffffff;
+}
+
 /* Base */
 * {
     margin: 0;
@@ -49,7 +55,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg);
+    background-color: var(--bg);
     color: var(--fg);
     font-family: "Family", system-ui, -apple-system, sans-serif;
     font-size: 20px;
@@ -60,6 +66,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
+    /* no theme fade on switch */
 }
 
 main {
