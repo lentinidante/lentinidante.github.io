@@ -84,9 +84,17 @@
         let currentMode = null;
         let currentlyPlaying = null;
         let isButtonActive = false; // Track if a button is actively pressed
+        let hasUserInteracted = false; // Track if user has interacted for mobile audio
+        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // Track user interaction for mobile audio
+        function markUserInteracted() {
+            hasUserInteracted = true;
+        }
 
         // Button event listeners
         readBtn.addEventListener('click', () => {
+            markUserInteracted();
             if (currentMode === 'read' && isButtonActive) {
                 // If same button is clicked and active, deactivate it
                 hideContent();
@@ -96,6 +104,7 @@
             }
         });
         writeBtn.addEventListener('click', () => {
+            markUserInteracted();
             if (currentMode === 'write' && isButtonActive) {
                 // If same button is clicked and active, deactivate it
                 hideContent();
@@ -105,6 +114,7 @@
             }
         });
         listenBtn.addEventListener('click', () => {
+            markUserInteracted();
             if (currentMode === 'listen' && isButtonActive) {
                 // If same button is clicked and active, deactivate it
                 hideContent();
@@ -142,9 +152,9 @@
             });
         });
 
-        // Click outside to deactivate button mode
+        // Click outside to deactivate button mode (but not on mobile)
         document.addEventListener('click', (e) => {
-            if (!readBtn.contains(e.target) && !writeBtn.contains(e.target) && !listenBtn.contains(e.target)) {
+            if (!isMobile && !readBtn.contains(e.target) && !writeBtn.contains(e.target) && !listenBtn.contains(e.target)) {
                 isButtonActive = false;
                 if (!isHoveringAnyButton()) {
                     hideContent();
@@ -179,6 +189,7 @@
                 if (item.type === 'album') {
                     contentItem.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        markUserInteracted();
                         playAudio(item.audio, contentItem);
                     });
                 }
@@ -206,7 +217,13 @@
                 if (!audioPlayer.paused) {
                     audioPlayer.pause();
                 } else {
-                    audioPlayer.play();
+                    // For mobile, ensure user has interacted
+                    if (isMobile && !hasUserInteracted) {
+                        return;
+                    }
+                    audioPlayer.play().catch(error => {
+                        console.log('Audio playback failed:', error);
+                    });
                 }
                 return;
             }
@@ -217,13 +234,35 @@
                 audioPlayer.currentTime = 0;
             }
 
-            // Play new audio
+            // Set audio source
             audioPlayer.src = audioSrc;
-            audioPlayer.play().then(() => {
-                currentlyPlaying = audioSrc;
-            }).catch(error => {
-                console.log('Audio playback failed:', error);
-            });
+            audioPlayer.load(); // Ensure audio is loaded
+            
+            // For mobile, ensure user has interacted before playing
+            if (isMobile && !hasUserInteracted) {
+                return;
+            }
+
+            // Play new audio with proper error handling
+            const playPromise = audioPlayer.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    currentlyPlaying = audioSrc;
+                    // Add visual feedback for mobile
+                    if (isMobile && element) {
+                        element.style.opacity = '0.7';
+                        setTimeout(() => {
+                            element.style.opacity = '1';
+                        }, 200);
+                    }
+                }).catch(error => {
+                    console.log('Audio playback failed:', error);
+                    // On mobile, this might be due to autoplay policy
+                    if (isMobile) {
+                        console.log('Mobile audio requires user interaction');
+                    }
+                });
+            }
         }
 
         // Handle audio events
@@ -235,8 +274,13 @@
             console.log('Audio error occurred');
             currentlyPlaying = null;
         });
+
+        // Add touch event listeners for mobile
+        if (isMobile) {
+            document.addEventListener('touchstart', markUserInteracted, { once: true });
+            document.addEventListener('touchend', markUserInteracted, { once: true });
+        }
     </script>
 </body>
 </html>
-
 
