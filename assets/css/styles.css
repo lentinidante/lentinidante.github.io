@@ -45,6 +45,7 @@ html {
     height: 100%;
     width: 100%;
     position: fixed;
+    background-color: var(--bg);
 }
 
 body {
@@ -127,6 +128,7 @@ button {
     transition: all 0.3s ease;
     -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
     touch-action: manipulation; /* Optimize touch interactions */
+    border-radius: 0; /* Square hard edge on all platforms */
 }
 
 button:hover {
@@ -136,7 +138,7 @@ button:hover {
 button.active {
     background-color: var(--fg-strong);
     color: var(--bg);
-    border-radius: 4px;
+    border-radius: 0;
 }
 
 /* Active state for mobile touch */
