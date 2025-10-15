@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0064e6" id="theme-color">
     <title>Dante Lentini</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -44,6 +46,7 @@
     <script>
         // Theme init
         const rootEl = document.documentElement;
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
         const THEME_KEY = 'theme-preference';
         const sfx = new Audio('assets/audio/dark-mode.mp3');
         sfx.preload = 'auto';
@@ -54,6 +57,7 @@
         rootEl.removeAttribute('data-theme');
         if (initialStarCanvas) initialStarCanvas.style.display = 'none';
         localStorage.setItem(THEME_KEY, 'light');
+        if (themeColorMeta) themeColorMeta.setAttribute('content', '#0064e6');
 
         // Content data
         const contentData = {
@@ -236,6 +240,15 @@
             contentItems.classList.add('active');
         }
 
+        function fadeOutContent(durationMs = 600) {
+            if (!contentItems.classList.contains('active')) return;
+            contentItems.classList.add('fade-out');
+            setTimeout(() => {
+                hideContent();
+                contentItems.classList.remove('fade-out');
+            }, durationMs);
+        }
+
         function hideContent() {
             contentItems.classList.remove('active');
             [readBtn, writeBtn, listenBtn].forEach(btn => btn.classList.remove('active'));
@@ -375,15 +388,13 @@
             if (next === 'dark') {
                 // delayed enter to dark
                 preloadReadImages();
-                strobeWindowUntil = performance.now() + 5800;
-                // On mobile: do NOT show books immediately to avoid accidental press; reveal with theme
-                if (!isMobile) {
-                    isButtonActive = true;
-                    showContent('read');
-                }
+                strobeWindowUntil = performance.now() + 6300;
+                // If any content is visible/selected, gently fade it out before switching
+                fadeOutContent(600);
                 toggleTimeoutId = setTimeout(() => {
                     rootEl.setAttribute('data-theme', 'dark');
                     if (starCanvas) starCanvas.style.display = 'block';
+                    if (themeColorMeta) themeColorMeta.setAttribute('content', '#000000');
                     // Reveal books exactly when dark applies (mobile and desktop)
                     isButtonActive = true;
                     showContent('read');
@@ -392,7 +403,7 @@
                     strobeWindowUntil = 0; // end strobe window
                     pendingDark = false;
                     localStorage.setItem(THEME_KEY, 'dark');
-                }, 5800);
+                }, 6300);
                 pendingDark = true;
             } else {
                 // instant exit to light, cancel pending enter
@@ -406,6 +417,10 @@
                 try { sfx.pause(); sfx.currentTime = 0; } catch (_) {}
                 pendingDark = false;
                 localStorage.setItem(THEME_KEY, 'light');
+                if (themeColorMeta) themeColorMeta.setAttribute('content', '#0064e6');
+                // Ensure no buttons remain selected and content is hidden
+                hideContent();
+                [readBtn, writeBtn, listenBtn].forEach(btn => btn.blur());
             }
             // Play SFX without interrupting main audio
             try {
